@@ -1,0 +1,4 @@
+﻿<appSettings>
+  <add key="FASEMAIL" value="[email here]"/>
+  <add key="CHILDCAREEMAIL" value="[email here]"/>
+</appSettings>
