@@ -326,10 +326,4 @@ namespace Suitability
             message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);            
         }
     }
-}
-
- //Dim sendNotification As SendNotification = New Suitability.SendNotification(WebConfigurationManager.AppSettings("SiteEmailSystemGenerated"), _
- //                                                                           txtid.Value, Application("mysql_connect_string"), _
- //                                                                           WebConfigurationManager.AppSettings("SiteSmtpServer").ToString, _
- //                                                                           Server.MapPath("../onboarding"), _
- //                                                                           Server.MapPath("../onboarding/regionalemails.xml"))
+}-
