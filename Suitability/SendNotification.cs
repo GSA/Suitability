@@ -326,4 +326,4 @@ namespace Suitability
             message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);            
         }
     }
-}-
+}
