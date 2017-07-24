@@ -1,7 +1,7 @@
 ﻿<appSettings>
   <add key="FASEMAIL" value="[email here]" />
   <add key="CHILDCAREEMAIL" value="[email here]" />
-  <add key="CONNECTIONSTRING" value="connection string here" />
+  <add key="CONNECTIONSTRING" value="connectionString="server=172.30.160.169; port=3306; user id=jgoodell; password=@9G10F*112Qu;persist security info=True;database=hspd; pooling=true;"" />
   <add key="SMTPSERVER" value="smtp server" />
   <add key="DEFAULTEMAIL" value="default e-mail" />
   <add key="ONBOARDING" value="folder location" />

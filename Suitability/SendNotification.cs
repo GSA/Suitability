@@ -289,10 +289,19 @@ namespace Suitability
                     break;
                 case "sac":
                 case "fingerprint":
-                    body = File.ReadAllText(onboardingLocation + @"\SAC.html");
+                    //body = File.ReadAllText(onboardingLocation + @"\SAC.html");
 
-                    //Has a specific subject
-                    subject = "[Name (first, middle, last, suffix)] - GSA Special Agreement Check (SAC) Fitness Determination Applicant Instructions (less than 6 month)";
+                    ////Has a specific subject
+                    //subject = "[Name (first, middle, last, suffix)] - GSA Special Agreement Check (SAC) Fitness Determination Applicant Instructions (less than 6 month)";
+                    switch (personInfo.Region)
+                    {
+                        case "":
+                            break;
+
+
+                    }
+
+
 
                     break;
                 default:
