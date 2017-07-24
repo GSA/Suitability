@@ -20,7 +20,7 @@ namespace SuitabilityTest
             
             SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, 1, connectionString, smtpServer, onboardidng);
             
-            sendNotification.SendAdjudicationNotification();
+            //sendNotification.SendAdjudicationNotification();
             sendNotification.SendSponsorshipNotification();
         }
     }
