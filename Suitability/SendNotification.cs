@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -289,44 +290,22 @@ namespace Suitability
                     break;
                 case "sac":
                 case "fingerprint":
-                    switch (personInfo.Region)
+
+                    List<PersonDetails> pd = new List<PersonDetails>() { personInfo };
+                    if (pd.Where(e => new[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10" }.Contains(e.Region) && e.MajorOrg.ToLower() != "p").ToList().Count > 0)
                     {
-                        //Check if Region is 1-10
-                        case "01":
-                        case "02":
-                        case "03":
-                        case "04":
-                        case "05":
-                        case "06":
-                        case "07":
-                        case "08":
-                        case "09":
-                        case "10":
-                            //If Region is 1-10 and MajorOrg not equal to "P" then send new email with attachment
-                            if (!personInfo.MajorOrg.ToLower().Equals("p"))
-                            {
-                                //use SAC_PBS email
-                                body = File.ReadAllText(onboardingLocation + @"\SAC_PBS.html");
-                                //include OF0306.pdf attachment
-                                emailAttachments.Append(onboardingLocation + @"\OF0306.pdf");                                
-                            }
-                            //If Region is 1-10 and MajorOrg is "P" then send old sac email
-                            else
-                            {
-                                //old sac email
-                                body = File.ReadAllText(onboardingLocation + @"\SAC.html");                                
-                            }
-                            break;
-                        case "CO":
-                        case "NCR":
-                            //If Region is "CO" or "NCR" then send new sac email and attachment regardless of MajorOrg
-                            //use SAC_PBS email
-                            body = File.ReadAllText(onboardingLocation + @"\SAC_PBS.html");
-                            //include OF0306.pdf attachment
-                            emailAttachments.Append(onboardingLocation + @"\OF0306.pdf");                                
-                            break;
-                        default:
-                            break;
+                        UseSacPBSEmail(emailAttachments, ref body);
+                    }
+                    else
+                    {
+                        if (pd.Where(e => new[] { "CO", "NCR" }.Contains(e.Region.ToUpper())).ToList().Count > 0)
+                        {
+                            UseSacPBSEmail(emailAttachments, ref body);
+                        }
+                        else
+                        {
+                            UseSacEmail(ref body);
+                        }
                     }
 
                     ////Has a specific subject
@@ -362,6 +341,20 @@ namespace Suitability
             emails = emails.TrimStart(',').TrimEnd(',');
 
             message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);            
+        }
+
+        private void UseSacPBSEmail(StringBuilder emailAttachments, ref string body)
+        {
+            //use SAC_PBS email
+            body = File.ReadAllText(onboardingLocation + @"\SAC_PBS.html");
+            //include OF0306.pdf attachment
+            emailAttachments.Append(onboardingLocation + @"\OF0306.pdf");
+        }
+
+        private void UseSacEmail(ref string body)
+        {
+            //old sac email
+            body = File.ReadAllText(onboardingLocation + @"\SAC.html");
         }
     }
 }

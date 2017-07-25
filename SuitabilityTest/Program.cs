@@ -18,7 +18,7 @@ namespace SuitabilityTest
         static void Main(string[] args)
         {
             
-            SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, 1, connectionString, smtpServer, onboardidng);
+            SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, 3, connectionString, smtpServer, onboardidng);
             
             sendNotification.SendAdjudicationNotification();
             sendNotification.SendSponsorshipNotification();
