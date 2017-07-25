@@ -307,39 +307,31 @@ namespace Suitability
                             {
                                 //use SAC_PBS email
                                 body = File.ReadAllText(onboardingLocation + @"\SAC_PBS.html");
-
                                 //include OF0306.pdf attachment
-                                emailAttachments.Append(onboardingLocation + @"\OF0306.pdf");
-
-                                ////Has a specific subject
-                                subject = "[Name (first, middle, last, suffix)] - GSA Special Agreement Check (SAC) Fitness Determination Applicant Instructions (less than 6 month)";
+                                emailAttachments.Append(onboardingLocation + @"\OF0306.pdf");                                
                             }
                             //If Region is 1-10 and MajorOrg is "P" then send old sac email
                             else
                             {
                                 //old sac email
-                                body = File.ReadAllText(onboardingLocation + @"\SAC.html");
-
-                                ////Has a specific subject
-                                subject = "[Name (first, middle, last, suffix)] - GSA Special Agreement Check (SAC) Fitness Determination Applicant Instructions (less than 6 month)";
+                                body = File.ReadAllText(onboardingLocation + @"\SAC.html");                                
                             }
                             break;
                         case "CO":
                         case "NCR":
                             //If Region is "CO" or "NCR" then send new sac email and attachment regardless of MajorOrg
-                            {
-                                //use SAC_PBS email
-                                body = File.ReadAllText(onboardingLocation + @"\SAC_PBS.html");
-                                //include OF0306.pdf attachment
-                                emailAttachments.Append(onboardingLocation + @"\OF0306.pdf");
-
-                                ////Has a specific subject
-                                subject = "[Name (first, middle, last, suffix)] - GSA Special Agreement Check (SAC) Fitness Determination Applicant Instructions (less than 6 month)";
-                            }
+                            //use SAC_PBS email
+                            body = File.ReadAllText(onboardingLocation + @"\SAC_PBS.html");
+                            //include OF0306.pdf attachment
+                            emailAttachments.Append(onboardingLocation + @"\OF0306.pdf");                                
                             break;
                         default:
                             break;
                     }
+
+                    ////Has a specific subject
+                    subject = "[Name (first, middle, last, suffix)] - GSA Special Agreement Check (SAC) Fitness Determination Applicant Instructions (less than 6 month)";
+
                     break;
                 default:
                     break;
