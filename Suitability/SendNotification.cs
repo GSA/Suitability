@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -289,9 +290,18 @@ namespace Suitability
                     break;
                 case "sac":
                 case "fingerprint":
-                    body = File.ReadAllText(onboardingLocation + @"\SAC.html");
 
-                    //Has a specific subject
+                    if( (new[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10" }.Contains(personInfo.Region) && personInfo.MajorOrg.ToLower() != "p") || (new[] { "CO", "NCR" }.Contains(personInfo.Region.ToUpper())) )
+                    {
+                        UseSacPBSEmail(emailAttachments, ref body);
+                    }
+                    else
+                    {                        
+                        UseSacEmail(ref body);
+                        
+                    }
+
+                    ////Has a specific subject
                     subject = "[Name (first, middle, last, suffix)] - GSA Special Agreement Check (SAC) Fitness Determination Applicant Instructions (less than 6 month)";
 
                     break;
@@ -325,11 +335,19 @@ namespace Suitability
 
             message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);            
         }
+
+        private void UseSacPBSEmail(StringBuilder emailAttachments, ref string body)
+        {
+            //use SAC_PBS email
+            body = File.ReadAllText(onboardingLocation + @"\SAC_PBS.html");
+            //include OF0306.pdf attachment
+            emailAttachments.Append(onboardingLocation + @"\OF0306.pdf");
+        }
+
+        private void UseSacEmail(ref string body)
+        {
+            //old sac email
+            body = File.ReadAllText(onboardingLocation + @"\SAC.html");
+        }
     }
 }
-
- //Dim sendNotification As SendNotification = New Suitability.SendNotification(WebConfigurationManager.AppSettings("SiteEmailSystemGenerated"), _
- //                                                                           txtid.Value, Application("mysql_connect_string"), _
- //                                                                           WebConfigurationManager.AppSettings("SiteSmtpServer").ToString, _
- //                                                                           Server.MapPath("../onboarding"), _
- //                                                                           Server.MapPath("../onboarding/regionalemails.xml"))
