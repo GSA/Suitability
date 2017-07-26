@@ -291,21 +291,14 @@ namespace Suitability
                 case "sac":
                 case "fingerprint":
 
-                    List<PersonDetails> pd = new List<PersonDetails>() { personInfo };
-                    if (pd.Where(e => new[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10" }.Contains(e.Region) && e.MajorOrg.ToLower() != "p").ToList().Count > 0)
+                    if( (new[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10" }.Contains(personInfo.Region) && personInfo.MajorOrg.ToLower() != "p") || (new[] { "CO", "NCR" }.Contains(personInfo.Region.ToUpper())) )
                     {
                         UseSacPBSEmail(emailAttachments, ref body);
                     }
                     else
-                    {
-                        if (pd.Where(e => new[] { "CO", "NCR" }.Contains(e.Region.ToUpper())).ToList().Count > 0)
-                        {
-                            UseSacPBSEmail(emailAttachments, ref body);
-                        }
-                        else
-                        {
-                            UseSacEmail(ref body);
-                        }
+                    {                        
+                        UseSacEmail(ref body);
+                        
                     }
 
                     ////Has a specific subject

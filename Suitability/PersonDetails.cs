@@ -21,21 +21,29 @@ namespace Suitability
         //Should change to generic
         public static PersonDetails Adjudication(IDataRecord record)
         {
-            return new PersonDetails
+            try
             {
-                FullName = record["Full Name"].ToString(),
-                SubjectName = record["Subject Name"].ToString(),
-                Position = record["Position"].ToString(),
-                HomeEMail = record["Home E-Mail"].ToString(),
-                IsCitizen = (sbyte)record["Is Citizen"] == 1,
-                //SponsorshipDate = (DateTime)record["Sponsored Date"] as DateTime?,
-                InvestigationDate = (DateTime)record["Investigation Date"] as DateTime?,
-                InvestigatonRequested = record["Investigation Requested"].ToString(),
-                InvestigationType = record["Investigation Type"].ToString(),
-                PortOfEntryDate = record["Port of Entry"].ToString(),
-                Region = record["Region"].ToString(),
-                MajorOrg = record["Major Org"].ToString()
-            };
+                return new PersonDetails
+                {
+                    FullName = record["Full Name"].ToString(),
+                    SubjectName = record["Subject Name"].ToString(),
+                    Position = record["Position"].ToString(),
+                    HomeEMail = record["Home E-Mail"].ToString(),
+                    IsCitizen = (bool)record["Is Citizen"],
+                    //SponsorshipDate = (DateTime)record["Sponsored Date"] as DateTime?,
+                    InvestigationDate = (DateTime)record["Investigation Date"] as DateTime?,
+                    InvestigatonRequested = record["Investigation Requested"].ToString(),
+                    InvestigationType = record["Investigation Type"].ToString(),
+                    PortOfEntryDate = record["Port of Entry"].ToString(),
+                    Region = record["Region"].ToString(),
+                    MajorOrg = record["Major Org"].ToString()
+                };
+            }
+            catch(Exception e)
+            {
+                //log
+                throw;
+            }
         }
 
         public static PersonDetails Sponsorship(IDataRecord record)
@@ -48,7 +56,7 @@ namespace Suitability
                     SubjectName = record["Subject Name"].ToString(),
                     Position = record["Position"].ToString(),
                     HomeEMail = record["Home E-Mail"].ToString(),
-                    IsCitizen = (sbyte)record["Is Citizen"] == 1,
+                    IsCitizen = (bool)record["Is Citizen"],
                     //SponsorshipDate = (DateTime)record["Sponsored Date"] as DateTime?,                
                     InvestigatonRequested = record["Investigation Requested"].ToString(),
                     InvestigationType = record["Investigation Type"].ToString(),
@@ -59,6 +67,7 @@ namespace Suitability
             }
             catch (Exception e)
             {
+                //log
                 throw;
             }
         }
