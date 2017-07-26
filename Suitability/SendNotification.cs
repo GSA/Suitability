@@ -364,7 +364,8 @@ namespace Suitability
             //split list to make it easier to remove elements regardless of position
             var emailList = emails.Split(',').ToList();
             //remove regionEmail from list
-            emailList.RemoveAt(emailList.FindIndex(e => e == regionalEmail));
+            if(emailList.Exists(e => e==regionalEmail))
+                emailList.RemoveAt(emailList.FindIndex(e => e == regionalEmail));
             //call send after converting back to comma separated string       
             message.Send(defaultEMail, personInfo.HomeEMail, string.Join(",", emailList), "", subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
         }
