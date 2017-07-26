@@ -223,7 +223,10 @@ namespace Suitability
 
             var emails = string.Join(",", emailsToJoin.Where(s => !string.IsNullOrEmpty(s))).TrimEnd(',');
 
-            message.Send(defaultEMail, gsaPOCEMails, emails, defaultEMail, subject, body, "", smtpServer, true);
+            if (IncludeChildCareEMail(personInfo.InvestigatonRequested.ToLower(), personInfo.InvestigatonRequested.ToLower()))
+                SendT1C(personInfo, emails, subject, body, "", regionalEMails);
+            else
+                message.Send(defaultEMail, gsaPOCEMails, emails, defaultEMail, subject, body, "", smtpServer, true);
             
             return;
         }
@@ -339,7 +342,7 @@ namespace Suitability
             //Remove defaultEMail from email BCC
             //Remove zonal email from sender and recipient
             if (IncludeChildCareEMail(personInfo.InvestigatonRequested.ToLower(), personInfo.InvestigatonRequested.ToLower()))
-                SendT1C(personInfo, emails, subject, body, emailAttachments, regionalEMail);
+                SendT1C(personInfo, emails, subject, body, emailAttachments.ToString(), regionalEMail);
             else
                 message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
         }
@@ -356,7 +359,7 @@ namespace Suitability
         /// <param name="body"></param>
         /// <param name="emailAttachments"></param>
         /// <param name="regionalEmail"></param>
-        private void SendT1C(PersonDetails personInfo, string emails, string subject, string body, StringBuilder emailAttachments, string regionalEmail)
+        private void SendT1C(PersonDetails personInfo, string emails, string subject, string body, string emailAttachments, string regionalEmail)
         {
             //split list to make it easier to remove elements regardless of position
             var emailList = emails.Split(',').ToList();
