@@ -223,7 +223,10 @@ namespace Suitability
 
             var emails = string.Join(",", emailsToJoin.Where(s => !string.IsNullOrEmpty(s))).TrimEnd(',');
 
-            message.Send(defaultEMail, gsaPOCEMails, emails, defaultEMail, subject, body, "", smtpServer, true);
+            if (IncludeChildCareEMail(personInfo.InvestigatonRequested.ToLower(), personInfo.InvestigatonRequested.ToLower()))
+                SendT1C(personInfo, emails, subject, body, "", regionalEMails);
+            else
+                message.Send(defaultEMail, gsaPOCEMails, emails, defaultEMail, subject, body, "", smtpServer, true);
             
             return;
         }
@@ -328,14 +331,50 @@ namespace Suitability
             if (IncludeFASEMail(personInfo.MajorOrg.ToLower()))
                 emails = string.Join(",", emails, ConfigurationManager.AppSettings["FASEMAIL"].ToString());
 
+            //Adds CHILDCAREEMAIL to email CC
             if (IncludeChildCareEMail(personInfo.InvestigatonRequested.ToLower(), personInfo.InvestigatonRequested.ToLower()))
                 emails = string.Join(",", emails, ConfigurationManager.AppSettings["CHILDCAREEMAIL"].ToString());
 
+            //Removes leading and trailing commas
             emails = emails.TrimStart(',').TrimEnd(',');
 
-            message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);            
+            //If childcare send to default email (hspd12.security@gsa.gov) 
+            //Remove defaultEMail from email BCC
+            //Remove zonal email from sender and recipient
+            if (IncludeChildCareEMail(personInfo.InvestigatonRequested.ToLower(), personInfo.InvestigatonRequested.ToLower()))
+                SendT1C(personInfo, emails, subject, body, emailAttachments.ToString(), regionalEMail);
+            else
+                message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
         }
 
+        /// <summary>
+        /// Called if child care 
+        /// Send to default email (hspd12.security@gsa.gov) 
+        /// Remove defaultEMail from email BCC
+        /// Remove regional email from email var
+        /// </summary>
+        /// <param name="personInfo"></param>
+        /// <param name="emails"></param>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
+        /// <param name="emailAttachments"></param>
+        /// <param name="regionalEmail"></param>
+        private void SendT1C(PersonDetails personInfo, string emails, string subject, string body, string emailAttachments, string regionalEmail)
+        {
+            //split list to make it easier to remove elements regardless of position
+            var emailList = emails.Split(',').ToList();
+            //remove regionEmail from list
+            if(emailList.Exists(e => e==regionalEmail))
+                emailList.RemoveAt(emailList.FindIndex(e => e == regionalEmail));
+            //call send after converting back to comma separated string       
+            message.Send(defaultEMail, personInfo.HomeEMail, string.Join(",", emailList), "", subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
+        }
+
+        /// <summary>
+        /// Set body to SAC_PBS and attaches of0306
+        /// </summary>
+        /// <param name="emailAttachments"></param>
+        /// <param name="body"></param>
         private void UseSacPBSEmail(StringBuilder emailAttachments, ref string body)
         {
             //use SAC_PBS email
@@ -344,6 +383,10 @@ namespace Suitability
             emailAttachments.Append(onboardingLocation + @"\OF0306.pdf");
         }
 
+        /// <summary>
+        /// Set body to SAC with no attachment
+        /// </summary>
+        /// <param name="body"></param>
         private void UseSacEmail(ref string body)
         {
             //old sac email
