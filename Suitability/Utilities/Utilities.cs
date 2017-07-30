@@ -5,6 +5,11 @@ namespace Suitability.Utilities
 {
     class Utilities
     {
+        /// <summary>
+        /// Returns hashed ssn
+        /// </summary>
+        /// <param name="ssn"></param>
+        /// <returns></returns>
         public byte[] HashSSN(string ssn)
         {
             byte[] hashedFullSSN = null;

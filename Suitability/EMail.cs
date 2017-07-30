@@ -5,6 +5,7 @@ namespace Suitability
 {
     class EMail
     {
+        //Class variables
         protected string _strSmtpServer = string.Empty;
         protected string _strEmailFrom = string.Empty;
         protected string _strEmailTo = string.Empty;
@@ -15,6 +16,18 @@ namespace Suitability
         protected string _strEmailAttachments = string.Empty;
         protected bool _IsBodyHtml = false;
 
+        /// <summary>
+        /// A function that calls private function after assignment of variables
+        /// </summary>
+        /// <param name="strEmailFrom"></param>
+        /// <param name="strEmailTo"></param>
+        /// <param name="strEmailCc"></param>
+        /// <param name="strEmailBcc"></param>
+        /// <param name="strEmailSubject"></param>
+        /// <param name="strEmailMessageBody"></param>
+        /// <param name="strEmailAttachments"></param>
+        /// <param name="strSmtpServer"></param>
+        /// <param name="IsBodyHtml"></param>
         public void Send(string strEmailFrom, string strEmailTo, string strEmailCc, string strEmailBcc, string strEmailSubject,
             string strEmailMessageBody, string strEmailAttachments, string strSmtpServer, bool IsBodyHtml = false)
         {
@@ -30,6 +43,9 @@ namespace Suitability
             SendEmail();
         }
 
+        /// <summary>
+        /// Sends an email using smtp server
+        /// </summary>
         private void SendEmail()
         {
 
@@ -78,6 +94,7 @@ namespace Suitability
                     //-->SmtpMail.Credentials = (ICredentialsByHost)CredentialCache.DefaultNetworkCredentials;
                     SmtpMail.Send(message);
                 }
+                //Catch failed recipient error
                 catch (SmtpFailedRecipientsException ex)
                 {
                     string smtpfailedrecipients_msg = string.Empty;
@@ -99,6 +116,7 @@ namespace Suitability
 
                     throw new SmtpException(smtpfailedrecipients_msg, ex);
                 }
+                //Catch other errors
                 catch (Exception ex)
                 {
                     throw ex;
