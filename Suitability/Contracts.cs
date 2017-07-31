@@ -6,15 +6,23 @@ using System;
 namespace Suitability
 {
     class Contracts
-    {        
+    {
+        //Set up db connection
         private MySqlConnection conn;
         private MySqlCommand cmd = new MySqlCommand();
 
+        //Pass in connection to use
         public Contracts(MySqlConnection conn)
         {
             this.conn = conn;
         }
 
+        /// <summary>
+        /// Get POC emails from db
+        /// </summary>
+        /// <param name="personID"></param>
+        /// <param name="storedProcedure"></param>
+        /// <returns></returns>
         public string GetPOCEmails(int personID, string storedProcedure)
         {
             try
@@ -40,18 +48,24 @@ namespace Suitability
                         return (POCEMails == DBNull.Value) ? string.Empty : (string)POCEMails;
                     }
 
-                }                
+                }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            //Catch all errors
+            catch (MySqlException)
             {
                 //Log exception
                 throw;
             }
-        }       
+        }
 
         //change variable e-mails to names as this returns names not e-mails
+        /// <summary>
+        /// Get gsa poc names from db
+        /// </summary>
+        /// <param name="personID"></param>
+        /// <returns></returns>
         public string GetGSAPOCNames(int personID)
-        {            
+        {
             try
             {
                 using (conn)
@@ -72,17 +86,23 @@ namespace Suitability
 
                         object GSAPOCNames = cmd.ExecuteScalar();
 
-                        return (GSAPOCNames == DBNull.Value) ? string.Empty : (string)GSAPOCNames;                        
+                        return (GSAPOCNames == DBNull.Value) ? string.Empty : (string)GSAPOCNames;
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            ///Catch all errors
+            catch (MySqlException)
             {
                 //Log exception
                 throw;
             }
         }
 
+        /// <summary>
+        /// Get sponsorship emails from db
+        /// </summary>
+        /// <param name="personID"></param>
+        /// <returns></returns>
         public string GetSponsorshipEMails(int personID)
         {
             try
@@ -120,15 +140,21 @@ namespace Suitability
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            //Catch all errors
+            catch (MySqlException)
             {
                 //Log exception
                 throw;
             }
         }
-        
+
+        /// <summary>
+        /// Get contract details from db
+        /// </summary>
+        /// <param name="personID"></param>
+        /// <returns></returns>
         public ContractDetails GetContractDetails(int personID)
-        {            
+        {
             try
             {
                 using (conn)
@@ -156,13 +182,13 @@ namespace Suitability
 
                         return null;
                     }
-                }                
+                }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySqlException)
             {
                 //Log exception
                 throw;
-            }            
+            }
         }
     }
 }

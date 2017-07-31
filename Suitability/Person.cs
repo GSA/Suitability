@@ -4,21 +4,30 @@ using System.Data;
 namespace Suitability
 {
     class Person
-    {        
+    {
+        //Set up db connection
         private MySqlConnection conn;
         private MySqlCommand cmd = new MySqlCommand();
 
+        //Pass in connection to use
         public Person(MySqlConnection conn)
         {
             this.conn = conn;
         }
 
+        /// <summary>
+        /// Return person details from db
+        /// </summary>
+        /// <param name="personID"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public PersonDetails GetPersonDetails(int personID, string type)
-        { 
+        {
             try
             {
                 using (conn)
                 {
+                    //Open connection if not open
                     if (conn.State == ConnectionState.Closed)
                         conn.Open();
 
@@ -35,6 +44,7 @@ namespace Suitability
 
                         MySqlDataReader personData = cmd.ExecuteReader();
 
+                        //Return details depending on type
                         while (personData.Read())
                         {
                             if (type == "A") return PersonDetails.Adjudication(personData);
@@ -45,7 +55,7 @@ namespace Suitability
                     }
                 }
             }
-            catch (MySql.Data.MySqlClient.MySqlException ex)
+            catch (MySqlException)
             {
                 //Log exception
                 throw;
