@@ -7,6 +7,11 @@ namespace Suitability
 {
     class Attachments
     {
+        /// <summary>
+        /// Returns instructions based on region
+        /// </summary>
+        /// <param name="region"></param>
+        /// <returns></returns>
         public string ApplicaitonInstruction(string region)
         {
             switch (region)
@@ -33,6 +38,11 @@ namespace Suitability
             }
         }
 
+        /// <summary>
+        /// Returns State Form based on region
+        /// </summary>
+        /// <param name="region"></param>
+        /// <returns></returns>
         public string StateForm(string region)
         {
             switch (region)

@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -7,11 +8,16 @@ using System.Text;
 
 namespace Suitability
 {
-    
+
     public class SendNotification
     {
+        //Create connection reference
         private MySqlConnection conn = new MySqlConnection();
 
+        //Create message object
+        private EMail message = new EMail();
+
+        //Declare class variables and default values
         private string defaultEMail = "hspd12.security@gsa.gov";
         private int personID = 0;
         private string connectionString = string.Empty;
@@ -19,8 +25,6 @@ namespace Suitability
         //private string emailTemplatesLocation = string.Empty;
         //private string regionalXMLLocation = string.Empty;
         private string onboardingLocation = string.Empty;
-
-        private Suitability.EMail message = new Suitability.EMail();        
 
         /// <summary>
         /// Constructor for adjudication e-mails
@@ -31,27 +35,42 @@ namespace Suitability
         /// <param name="smtpServer"></param>
         /// <param name="emailTemplatesLocation"></param>
         public SendNotification(string defaultEMail, int personID, string connectionString, string smtpServer, string onboardingLocation)
-        {            
+        {
             this.defaultEMail = defaultEMail;
-            this.personID = personID;            
+            this.personID = personID;
             this.connectionString = connectionString;
             this.smtpServer = smtpServer;
             //this.emailTemplatesLocation = emailTemplatesLocation;
             //this.regionalXMLLocation = onboardingLocation;
             this.onboardingLocation = onboardingLocation;
-            this.conn.ConnectionString = connectionString;
+            conn.ConnectionString = connectionString;
         }
 
+        /// <summary>
+        /// Returns if major org is q
+        /// </summary>
+        /// <param name="majorOrg"></param>
+        /// <returns></returns>
         private bool IncludeFASEMail(string majorOrg)
         {
+            //this can be simplified
+            //return (majorOrg == "q");
             if (majorOrg == "q") return true;
-            
+
             return false;
         }
 
+        /// <summary>
+        /// Returns if tier 1 c
+        /// </summary>
+        /// <param name="investType"></param>
+        /// <param name="investTypeRequested"></param>
+        /// <returns></returns>
         private bool IncludeChildCareEMail(string investType, string investTypeRequested)
         {
-            if ((investType == "tier 1c") || (investTypeRequested =="tier 1c")) return true;
+            //This can be simplified
+            //return ((investType == "tier 1c") || (investTypeRequested =="tier 1c"));
+            if ((investType == "tier 1c") || (investTypeRequested == "tier 1c")) return true;
 
             return false;
         }
@@ -60,10 +79,11 @@ namespace Suitability
         /// Sends adjudication e-mails
         /// </summary>
         public void SendAdjudicationNotification()
-        {            
+        {
+            //Declare function variables
             //string emails = string.Empty;
             string body = string.Empty;
-            string subject = string.Empty;            
+            string subject = string.Empty;
             string gsaPOCEMails = string.Empty;
             string vendorPOCEmails = string.Empty;
             string regionalEMails = string.Empty;
@@ -74,13 +94,13 @@ namespace Suitability
 
             Person personData = new Person(conn); //connectionString);
             Contracts contractData = new Contracts(conn); //connectionString);
-                   
+
             PersonDetails personInfo = new PersonDetails();
-            ContractDetails contractInfo = new ContractDetails();            
+            ContractDetails contractInfo = new ContractDetails();
             Regions regionalData = new Regions();
 
+            //Get info from db
             personInfo = personData.GetPersonDetails(personID, "A");
-
             gsaPOCEMails = contractData.GetPOCEmails(personID, "AdjudicationGovEMails");
             vendorPOCEmails = contractData.GetPOCEmails(personID, "AdjudicationVendorEMails");
             gsaPOCNames = contractData.GetGSAPOCNames(personID);
@@ -88,11 +108,13 @@ namespace Suitability
 
             //If contract info is null then create a new empty one, sets the defaults to string.empty
             if (contractInfo == null)
-                contractInfo = new ContractDetails();                        
-            
+                contractInfo = new ContractDetails();
+
+            //If not CO or NCR then use regional email xml
             if (personInfo.Region != "CO" && personInfo.Region != "NCR")
                 regionalEMails = regionalData.GetRegionalEMails(personInfo.Region, onboardingLocation + @"\RegionalEMails.xml");
 
+            //if not unfavorable and not a citizen check POE < 3 years and assign investigation type to 3Years
             if (personInfo.InvestigationType.ToLower() != "unfavorable")
             {
                 if (!personInfo.IsCitizen)
@@ -111,6 +133,7 @@ namespace Suitability
                 }
             }
 
+            //Switch on investigation type to set email body
             switch (personInfo.InvestigationType.ToLower())
             {
                 case "naci":
@@ -199,7 +222,7 @@ namespace Suitability
             }
 
             body = body.Replace("[INVESTIGATIONTYPE]", investType);
-            
+
             //body = body.Replace("[INVESTIGATIONTYPE]", personInfo.InvestigationType);
 
             //Replace Investigation Date
@@ -212,25 +235,38 @@ namespace Suitability
                 return;
             }
 
+            //if fas
             if (IncludeFASEMail(personInfo.MajorOrg.ToLower()))
                 fasEMail = ConfigurationManager.AppSettings["FASEMAIL"].ToString();
 
+            //if child care
             if (IncludeChildCareEMail(personInfo.InvestigationType.ToLower(), personInfo.InvestigatonRequested.ToLower()))
                 childcareEMail = ConfigurationManager.AppSettings["CHILDCAREEMAIL"].ToString();
 
+            //Assemble email address variables into an array
             string[] emailsToJoin = { vendorPOCEmails, personInfo.HomeEMail, regionalEMails, fasEMail, childcareEMail };
 
+            //Join the variables into a string and assign to a new variable
             var emails = string.Join(",", emailsToJoin.Where(s => !string.IsNullOrEmpty(s))).TrimEnd(',');
 
-            message.Send(defaultEMail, gsaPOCEMails, emails, defaultEMail, subject, body, "", smtpServer, true);
-            
+            //If child care call t1c function
+            if (IncludeChildCareEMail(personInfo.InvestigatonRequested.ToLower(), personInfo.InvestigatonRequested.ToLower()))
+                SendT1C(personInfo, emails, subject, body, "", regionalEMails);
+            else
+                message.Send(defaultEMail, gsaPOCEMails, emails, defaultEMail, subject, body, "", smtpServer, true);
+
             return;
         }
 
+        /// <summary>
+        /// Send sponsorship emails
+        /// </summary>
         public void SendSponsorshipNotification()
         {
+            //Declare string builder to build email attachments list
             StringBuilder emailAttachments = new StringBuilder();
 
+            //Declare function variables
             string body = string.Empty;
             string subject = string.Empty;
             string emails = string.Empty;
@@ -239,23 +275,27 @@ namespace Suitability
             string investType = string.Empty;
             string phoneNumber = string.Empty;
 
+            //Instantiate objects
             Person personData = new Person(conn);
             PersonDetails personInfo = new PersonDetails();
             Contracts contracts = new Contracts(conn);
             Regions regionalData = new Regions();
             Attachments attachments = new Attachments();
 
+            //Set up db connection
             conn = new MySqlConnection();
-            conn.ConnectionString = connectionString;            
+            conn.ConnectionString = connectionString;
 
+            //Get data from db
             personInfo = personData.GetPersonDetails(personID, "S");
             sponsorshipEmails = contracts.GetSponsorshipEMails(personID);
-
             regionalEMail = regionalData.GetRegionalEMails(personInfo.Region, onboardingLocation + @"\RegionalEMails.xml");
             phoneNumber = regionalData.GetRegionalPhoneNumbers(personInfo.Region, onboardingLocation + @"\RegionalPhoneNumbers.xml");
 
+            //Set default subject line
             subject = "[Name (first, middle, last, suffix)] - Fitness Determination Applicant Instructions [Tier Type]";
 
+            //Switch on investigation requested to get needed attachments
             switch (personInfo.InvestigatonRequested.ToLower())
             {
                 case "tier 1":
@@ -289,23 +329,35 @@ namespace Suitability
                     break;
                 case "sac":
                 case "fingerprint":
-                    body = File.ReadAllText(onboardingLocation + @"\SAC.html");
 
-                    //Has a specific subject
+                    if ((new[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10" }.Contains(personInfo.Region) && personInfo.MajorOrg.ToLower() != "p") || (new[] { "CO", "NCR" }.Contains(personInfo.Region.ToUpper())))
+                    {
+                        UseSacPBSEmail(emailAttachments, ref body);
+                    }
+                    else
+                    {
+                        UseSacEmail(ref body);
+                    }
+
+                    ////Has a specific subject
                     subject = "[Name (first, middle, last, suffix)] - GSA Special Agreement Check (SAC) Fitness Determination Applicant Instructions (less than 6 month)";
 
                     break;
                 default:
                     break;
             }
-                        
+
+            //Replace placeholder name in subject
             subject = subject.Replace("[Name (first, middle, last, suffix)]", personInfo.FullName);
             subject = subject.Replace("[Tier Type]", personInfo.InvestigatonRequested);
+
+            //Replace placeholder fields in body
             body = body.Replace("[NAME]", personInfo.FullName);
             body = body.Replace("[REGIONALEMAIL]", regionalEMail);
             body = body.Replace("[PHONENUMBER]", phoneNumber);
 
-            if ((personInfo.Region == "NCR" || personInfo.Region == "CO") && 
+            //If NCR or CO and home email/sponsor email is null
+            if ((personInfo.Region == "NCR" || personInfo.Region == "CO") &&
                  string.IsNullOrEmpty(personInfo.HomeEMail) && string.IsNullOrEmpty(sponsorshipEmails))
             {
                 emails = regionalEMail;
@@ -315,21 +367,70 @@ namespace Suitability
                 emails = string.Join(",", sponsorshipEmails, regionalEMail);
             }
 
+            //If major org is q
             if (IncludeFASEMail(personInfo.MajorOrg.ToLower()))
                 emails = string.Join(",", emails, ConfigurationManager.AppSettings["FASEMAIL"].ToString());
 
+            //Adds CHILDCAREEMAIL to email CC
             if (IncludeChildCareEMail(personInfo.InvestigatonRequested.ToLower(), personInfo.InvestigatonRequested.ToLower()))
                 emails = string.Join(",", emails, ConfigurationManager.AppSettings["CHILDCAREEMAIL"].ToString());
 
+            //Removes leading and trailing commas
             emails = emails.TrimStart(',').TrimEnd(',');
 
-            message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);            
+            //If childcare send to default email (hspd12.security@gsa.gov) 
+            //Remove defaultEMail from email BCC
+            //Remove zonal email from sender and recipient
+            if (IncludeChildCareEMail(personInfo.InvestigatonRequested.ToLower(), personInfo.InvestigatonRequested.ToLower()))
+                SendT1C(personInfo, emails, subject, body, emailAttachments.ToString(), regionalEMail);
+            else
+                message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
+        }
+
+        /// <summary>
+        /// Called if child care 
+        /// Send to default email (hspd12.security@gsa.gov) 
+        /// Remove defaultEMail from email BCC
+        /// Remove regional email from email var
+        /// </summary>
+        /// <param name="personInfo"></param>
+        /// <param name="emails"></param>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
+        /// <param name="emailAttachments"></param>
+        /// <param name="regionalEmail"></param>
+        private void SendT1C(PersonDetails personInfo, string emails, string subject, string body, string emailAttachments, string regionalEmail)
+        {
+            //split list to make it easier to remove elements regardless of position
+            var emailList = emails.Split(',').ToList();
+            //remove regionEmail from list
+            if (emailList.Exists(e => e == regionalEmail))
+                emailList.RemoveAt(emailList.FindIndex(e => e == regionalEmail));
+            //call send after converting back to comma separated string
+            message.Send(defaultEMail, personInfo.HomeEMail, string.Join(",", emailList), "", subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
+        }
+
+        /// <summary>
+        /// Set body to SAC_PBS and attaches of0306
+        /// </summary>
+        /// <param name="emailAttachments"></param>
+        /// <param name="body"></param>
+        private void UseSacPBSEmail(StringBuilder emailAttachments, ref string body)
+        {
+            //use SAC_PBS email
+            body = File.ReadAllText(onboardingLocation + @"\SAC_PBS.html");
+            //include OF0306.pdf attachment
+            emailAttachments.Append(onboardingLocation + @"\OF0306.pdf");
+        }
+
+        /// <summary>
+        /// Set body to SAC with no attachment
+        /// </summary>
+        /// <param name="body"></param>
+        private void UseSacEmail(ref string body)
+        {
+            //old sac email
+            body = File.ReadAllText(onboardingLocation + @"\SAC.html");
         }
     }
 }
-
- //Dim sendNotification As SendNotification = New Suitability.SendNotification(WebConfigurationManager.AppSettings("SiteEmailSystemGenerated"), _
- //                                                                           txtid.Value, Application("mysql_connect_string"), _
- //                                                                           WebConfigurationManager.AppSettings("SiteSmtpServer").ToString, _
- //                                                                           Server.MapPath("../onboarding"), _
- //                                                                           Server.MapPath("../onboarding/regionalemails.xml"))
