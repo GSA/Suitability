@@ -8,18 +8,20 @@ using System.Configuration;
 
 namespace SuitabilityTest
 {
+    /// <summary>
+    /// Test class for suitability DLL
+    /// </summary>
     class Program
     {
-        private static string connectionString = ConfigurationManager.AppSettings["CONNECTIONSTRING"];       
+        private static string connectionString = ConfigurationManager.AppSettings["CONNECTIONSTRING"];
         private static string smtpServer = ConfigurationManager.AppSettings["SMTPSERVER"];
         private static string defaultEMail = ConfigurationManager.AppSettings["DEFAULTEMAIL"];
         private static string onboardidng = ConfigurationManager.AppSettings["ONBOARDING"];
 
         static void Main(string[] args)
         {
-            
             SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, 3, connectionString, smtpServer, onboardidng);
-            
+
             sendNotification.SendAdjudicationNotification();
             sendNotification.SendSponsorshipNotification();
         }

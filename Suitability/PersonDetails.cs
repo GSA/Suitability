@@ -4,7 +4,8 @@ using System.Data;
 namespace Suitability
 {
     class PersonDetails
-    {   
+    {
+        //Class properties
         public string FullName { get; set; }
         public string SubjectName { get; set; }
         public string Position { get; set; }
@@ -19,6 +20,11 @@ namespace Suitability
         public string InvestigationType { get; set; }
 
         //Should change to generic
+        /// <summary>
+        /// Returns person details object with data from IDataRecord
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
         public static PersonDetails Adjudication(IDataRecord record)
         {
             try
@@ -39,13 +45,18 @@ namespace Suitability
                     MajorOrg = record["Major Org"].ToString()
                 };
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 //log
                 throw;
             }
         }
 
+        /// <summary>
+        /// Returns person details object with data from IDataRecord
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
         public static PersonDetails Sponsorship(IDataRecord record)
         {
             try
@@ -57,7 +68,7 @@ namespace Suitability
                     Position = record["Position"].ToString(),
                     HomeEMail = record["Home E-Mail"].ToString(),
                     IsCitizen = (bool)record["Is Citizen"],
-                    //SponsorshipDate = (DateTime)record["Sponsored Date"] as DateTime?,                
+                    //SponsorshipDate = (DateTime)record["Sponsored Date"] as DateTime?,
                     InvestigatonRequested = record["Investigation Requested"].ToString(),
                     InvestigationType = record["Investigation Type"].ToString(),
                     PortOfEntryDate = record["Port of Entry"].ToString(),
@@ -65,7 +76,7 @@ namespace Suitability
                     MajorOrg = record["Major Org"].ToString()
                 };
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //log
                 throw;
