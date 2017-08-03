@@ -250,8 +250,13 @@ namespace Suitability
             var emails = string.Join(",", emailsToJoin.Where(s => !string.IsNullOrEmpty(s))).TrimEnd(',');
 
             //If child care call t1c function
-            if (IncludeChildCareEMail(personInfo.InvestigatonRequested.ToLower(), personInfo.InvestigatonRequested.ToLower()))
+            if (IncludeChildCareEMail(personInfo.InvestigationType.ToLower(), personInfo.InvestigatonRequested.ToLower()))
+            {
+                //If gsa poc emails exist append them to end of email list
+                if (!string.IsNullOrWhiteSpace(gsaPOCEMails))
+                    emails = emails + "," + gsaPOCEMails;
                 SendT1C(personInfo, emails, subject, body, "", regionalEMails);
+            }
             else
                 message.Send(defaultEMail, gsaPOCEMails, emails, defaultEMail, subject, body, "", smtpServer, true);
 
@@ -357,8 +362,7 @@ namespace Suitability
             body = body.Replace("[PHONENUMBER]", phoneNumber);
 
             //If NCR or CO and home email/sponsor email is null
-            if ((personInfo.Region == "NCR" || personInfo.Region == "CO") &&
-                 string.IsNullOrEmpty(personInfo.HomeEMail) && string.IsNullOrEmpty(sponsorshipEmails))
+            if ((personInfo.Region == "NCR" || personInfo.Region == "CO") && string.IsNullOrEmpty(personInfo.HomeEMail) && string.IsNullOrEmpty(sponsorshipEmails))
             {
                 emails = regionalEMail;
             }
@@ -372,7 +376,7 @@ namespace Suitability
                 emails = string.Join(",", emails, ConfigurationManager.AppSettings["FASEMAIL"].ToString());
 
             //Adds CHILDCAREEMAIL to email CC
-            if (IncludeChildCareEMail(personInfo.InvestigatonRequested.ToLower(), personInfo.InvestigatonRequested.ToLower()))
+            if (IncludeChildCareEMail(personInfo.InvestigationType.ToLower(), personInfo.InvestigatonRequested.ToLower()))
                 emails = string.Join(",", emails, ConfigurationManager.AppSettings["CHILDCAREEMAIL"].ToString());
 
             //Removes leading and trailing commas
@@ -381,7 +385,7 @@ namespace Suitability
             //If childcare send to default email (hspd12.security@gsa.gov) 
             //Remove defaultEMail from email BCC
             //Remove zonal email from sender and recipient
-            if (IncludeChildCareEMail(personInfo.InvestigatonRequested.ToLower(), personInfo.InvestigatonRequested.ToLower()))
+            if (IncludeChildCareEMail(personInfo.InvestigationType.ToLower(), personInfo.InvestigatonRequested.ToLower()))
                 SendT1C(personInfo, emails, subject, body, emailAttachments.ToString(), regionalEMail);
             else
                 message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
