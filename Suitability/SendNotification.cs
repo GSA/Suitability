@@ -251,12 +251,7 @@ namespace Suitability
 
             //If child care call t1c function
             if (IncludeChildCareEMail(personInfo.InvestigationType.ToLower(), personInfo.InvestigatonRequested.ToLower()))
-            {
-                //If gsa poc emails exist append them to end of email list
-                if (!string.IsNullOrWhiteSpace(gsaPOCEMails))
-                    emails = emails + "," + gsaPOCEMails;
-                SendT1C(personInfo, emails, subject, body, "", regionalEMails);
-            }
+                SendT1CAdjudication(gsaPOCEMails, emails, subject, body, "", regionalEMails);
             else
                 message.Send(defaultEMail, gsaPOCEMails, emails, defaultEMail, subject, body, "", smtpServer, true);
 
@@ -386,13 +381,13 @@ namespace Suitability
             //Remove defaultEMail from email BCC
             //Remove zonal email from sender and recipient
             if (IncludeChildCareEMail(personInfo.InvestigationType.ToLower(), personInfo.InvestigatonRequested.ToLower()))
-                SendT1C(personInfo, emails, subject, body, emailAttachments.ToString(), regionalEMail);
+                SendT1CSponsorship(personInfo, emails, subject, body, emailAttachments.ToString(), regionalEMail);
             else
                 message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
         }
 
         /// <summary>
-        /// Called if child care 
+        /// Called if child care for sponsorship
         /// Send to default email (hspd12.security@gsa.gov) 
         /// Remove defaultEMail from email BCC
         /// Remove regional email from email var
@@ -403,7 +398,7 @@ namespace Suitability
         /// <param name="body"></param>
         /// <param name="emailAttachments"></param>
         /// <param name="regionalEmail"></param>
-        private void SendT1C(PersonDetails personInfo, string emails, string subject, string body, string emailAttachments, string regionalEmail)
+        private void SendT1CSponsorship(PersonDetails personInfo, string emails, string subject, string body, string emailAttachments, string regionalEmail)
         {
             //split list to make it easier to remove elements regardless of position
             var emailList = emails.Split(',').ToList();
@@ -412,6 +407,28 @@ namespace Suitability
                 emailList.RemoveAt(emailList.FindIndex(e => e == regionalEmail));
             //call send after converting back to comma separated string
             message.Send(defaultEMail, personInfo.HomeEMail, string.Join(",", emailList), "", subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
+        }
+
+        /// <summary>
+        /// Called if child care for adjudication
+        /// send to gsapoc's
+        /// Remove regional email from list
+        /// </summary>
+        /// <param name="gsaPOCEmails"></param>
+        /// <param name="emails"></param>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
+        /// <param name="emailAttachments"></param>
+        /// <param name="regionalEmail"></param>
+        private void SendT1CAdjudication(string gsaPOCEmails, string emails, string subject, string body, string emailAttachments, string regionalEmail)
+        {
+            //split list to make it easier to remove elements regardless of position
+            var emailList = emails.Split(',').ToList();
+            //remove regionEmail from list
+            if (emailList.Exists(e => e == regionalEmail))
+                emailList.RemoveAt(emailList.FindIndex(e => e == regionalEmail));
+            //call send after converting back to comma separated string
+            message.Send(defaultEMail, gsaPOCEmails, string.Join(",", emailList), "", subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
         }
 
         /// <summary>
