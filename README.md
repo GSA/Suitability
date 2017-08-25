@@ -29,8 +29,12 @@ The repository contains a app config that points to external config files. These
    * **AppSettings.config should contain the following lines.**
   ~~~ xml
   <appSettings>
-  <add key="FASEMAIL" value="[email here]"/>
-  <add key="CHILDCAREEMAIL" value="[email here]"/>
+  <add key="FASEMAIL" value="[email here]" />
+  <add key="CHILDCAREEMAIL" value="[email here]" />
+  <add key="CONNECTIONSTRING" value="connection string here" />
+  <add key="SMTPSERVER" value="smtp server" />
+  <add key="DEFAULTEMAIL" value="default e-mail" />
+  <add key="ONBOARDING" value="folder location" />
   </appSettings>
   ~~~
   
