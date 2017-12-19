@@ -325,6 +325,7 @@ namespace Suitability
 
                     emailAttachments.Append(onboardingLocation + @"\GSA176-15.pdf" + ";");
                     emailAttachments.Append(onboardingLocation + @"\Tier1CStateForms.pdf");
+                    emailAttachments.Append(onboardingLocation + @"\SF85.pdf");
 
                     break;
                 case "sac":
