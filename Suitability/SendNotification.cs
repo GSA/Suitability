@@ -295,39 +295,55 @@ namespace Suitability
             //Set default subject line
             subject = "[Name (first, middle, last, suffix)] - Fitness Determination Applicant Instructions [Tier Type]";
 
+            var OF_0306 = "OF0306.pdf";
+            var GSA_3665 = "GSA3665.pdf";
+            var SF_85 = "SF85.pdf";
+            var SF_85P = "SF85P.pdf";
+            var appInstructions = attachments.ApplicaitonInstruction(personInfo.Region);
+            var additionalQuestionsForModerateRiskPositionsForm = "AdditionalQuestionsForModerateRiskPositionsForm.pdf";
+
             //Switch on investigation requested to get needed attachments
             switch (personInfo.InvestigatonRequested.ToLower())
             {
                 case "tier 1":
                 case "naci":
-                    body = File.ReadAllText(onboardingLocation + @"\Tier12S4.html");
+                    body = File.ReadAllText(GetFilePath("Tier1.html"));
 
-                    emailAttachments.Append(onboardingLocation + @"\OF0306.pdf" + ";");
-                    emailAttachments.Append(onboardingLocation + @"\GSA3665.pdf" + ";");
-                    emailAttachments.Append(onboardingLocation + @"\SF85.pdf" + ";");
-                    emailAttachments.Append(onboardingLocation + @"\" + attachments.ApplicaitonInstruction(personInfo.Region));
-
+                    emailAttachments.Append(GetFilePath(OF_0306, true));
+                    emailAttachments.Append(GetFilePath(GSA_3665, true));
+                    emailAttachments.Append(GetFilePath(SF_85, true));
+                    emailAttachments.Append(GetFilePath(appInstructions, true));
                     break;
+
                 case "tier 2s":
-                case "tier 4":
                 case "mbi":
+                    body = File.ReadAllText(GetFilePath("Tier2S.html"));
+
+                    emailAttachments.Append(GetFilePath(OF_0306, true));
+                    emailAttachments.Append(GetFilePath(GSA_3665, true));
+                    emailAttachments.Append(GetFilePath(SF_85P, true));
+                    emailAttachments.Append(GetFilePath(appInstructions, true));
+                    emailAttachments.Append(GetFilePath(additionalQuestionsForModerateRiskPositionsForm, true));
+                    break;
+
+                case "tier 4":
                 case "bi":
-                    body = File.ReadAllText(onboardingLocation + @"\Tier12S4.html");
+                    body = File.ReadAllText(GetFilePath("Tier4.html"));
 
-                    emailAttachments.Append(onboardingLocation + @"\OF0306.pdf" + ";");
-                    emailAttachments.Append(onboardingLocation + @"\GSA3665.pdf" + ";");
-                    emailAttachments.Append(onboardingLocation + @"\SF85P.pdf" + ";");
-                    emailAttachments.Append(onboardingLocation + @"\" + attachments.ApplicaitonInstruction(personInfo.Region));
-
+                    emailAttachments.Append(GetFilePath(OF_0306, true));
+                    emailAttachments.Append(GetFilePath(GSA_3665, true));
+                    emailAttachments.Append(GetFilePath(SF_85P, true));
+                    emailAttachments.Append(GetFilePath(appInstructions, true));
                     break;
+
                 case "tier 1c":
-                    body = File.ReadAllText(onboardingLocation + @"\Tier1C.html");
+                    body = File.ReadAllText(GetFilePath("Tier1C.html"));
 
-                    emailAttachments.Append(onboardingLocation + @"\GSA176-15.pdf" + ";");
-                    emailAttachments.Append(onboardingLocation + @"\Tier1CStateForms.pdf" + ";");
-                    emailAttachments.Append(onboardingLocation + @"\SF85.pdf");
-
+                    emailAttachments.Append(GetFilePath("GSA176 - 15.pdf", true));
+                    emailAttachments.Append(GetFilePath("Tier1CStateForms.pdf", true));
+                    emailAttachments.Append(GetFilePath(SF_85, true));
                     break;
+
                 case "sac":
                 case "fingerprint":
 
@@ -385,6 +401,18 @@ namespace Suitability
                 SendT1CSponsorship(personInfo, emails, subject, body, emailAttachments.ToString(), regionalEMail);
             else
                 message.Send(regionalEMail, personInfo.HomeEMail, emails, defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
+        }
+
+        /// <summary>
+        ///     Configures the attachment path by combining the onboarding loaction
+        ///     with the file name.
+        /// </summary>
+        /// <param name="fileName">The file name of the attachment</param>
+        /// <param name="isAttachement">Flag determining if the file is an attachment</param>
+        /// <returns>Returns a <see cref="string"/> containing the onboarding location and the file name.</returns>
+        private string GetFilePath(string fileName, bool isAttachement = false)
+        {
+            return $@"{onboardingLocation}\{fileName}{(isAttachement ? ";" : "")}";
         }
 
         /// <summary>
