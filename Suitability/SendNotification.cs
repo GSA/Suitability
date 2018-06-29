@@ -339,7 +339,7 @@ namespace Suitability
                 case "tier 1c":
                     body = File.ReadAllText(GetFilePath("Tier1C.html"));
 
-                    emailAttachments.Append(GetFilePath("GSA176 - 15.pdf", true));
+                    emailAttachments.Append(GetFilePath("GSA176-15.pdf", true));
                     emailAttachments.Append(GetFilePath("Tier1CStateForms.pdf", true));
                     emailAttachments.Append(GetFilePath(SF_85, true));
                     break;
