@@ -299,7 +299,7 @@ namespace Suitability
             var GSA_3665 = "GSA3665.pdf";
             var SF_85 = "SF85.pdf";
             var SF_85P = "SF85P.pdf";
-            var appInstructions = attachments.ApplicaitonInstruction(personInfo.Region);
+            var appInstructions = attachments.ApplicaitonInstruction(personInfo.Region, personInfo.InvestigatonRequested);
             var additionalQuestionsForModerateRiskPositionsForm = "AdditionalQuestionsForModerateRiskPositionsForm.pdf";
 
             //Switch on investigation requested to get needed attachments

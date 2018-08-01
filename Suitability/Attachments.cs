@@ -12,27 +12,45 @@ namespace Suitability
         /// </summary>
         /// <param name="region"></param>
         /// <returns></returns>
-        public string ApplicaitonInstruction(string region)
+        public string ApplicaitonInstruction(string region, string invest)
         {
             switch (region)
             {
                 case "01":
                 case "02":
                 case "03":
-                    return "ZoneA-ApplicationInstructions.pdf";
+                    return getPdfForZoneAndInvestType("A", invest);
                 case "04":
                 case "07":
-                    return "ZoneB-ApplicationInstructions.pdf";
+                    return getPdfForZoneAndInvestType("B", invest);
                 case "05":
                 case "06":
                 case "08":
-                    return "ZoneC-ApplicationInstructions.pdf";
+                    return getPdfForZoneAndInvestType("C", invest);
                 case "09":
                 case "10":
-                    return "ZoneD-ApplicationInstructions.pdf";
+                    return getPdfForZoneAndInvestType("D", invest);
                 case "NCR":
                 case "CO":
-                    return "ZoneE-ApplicationInstructions.pdf";
+                    return getPdfForZoneAndInvestType("E", invest);
+                default:
+                    return "";
+            }
+        }
+
+        string getPdfForZoneAndInvestType(string zone, string investType)
+        {
+            switch(investType.ToLower())
+            {
+                case "tier 1":
+                case "naci":
+                    return string.Format("T1Zone{0}-ApplicationInstructions.pdf", zone);
+                case "tier 2s":
+                case "mbi":
+                    return string.Format("T2SZone{0}-ApplicationInstructions.pdf", zone);
+                case "tier 4":
+                case "bi":
+                    return string.Format("T4Zone{0}-ApplicationInstructions.pdf", zone);
                 default:
                     return "";
             }
