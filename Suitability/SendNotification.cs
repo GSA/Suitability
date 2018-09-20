@@ -410,7 +410,7 @@ namespace Suitability
             emails = emails.TrimStart(',').TrimEnd(',');
 
             //If childcare send to default email (hspd12.security@gsa.gov) 
-            //Remove defaultEMail from email BCC
+            //Remove defaultEMail from email BCC - UPDATE 09/20/2018 - Client wants to add HSPD-12 Security to BCC
             //Remove zonal email from sender and recipient
             if (IncludeChildCareEMail(personInfo.InvestigationType.ToLower(), personInfo.InvestigatonRequested.ToLower()))
                 SendT1CSponsorship(personInfo, emails, subject, body, emailAttachments.ToString(), regionalEMail);
@@ -450,7 +450,7 @@ namespace Suitability
             if (emailList.Exists(e => e == regionalEmail))
                 emailList.RemoveAt(emailList.FindIndex(e => e == regionalEmail));
             //call send after converting back to comma separated string
-            message.Send(defaultEMail, personInfo.HomeEMail, string.Join(",", emailList), "", subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
+            message.Send(defaultEMail, personInfo.HomeEMail, string.Join(",", emailList), defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
         }
 
         /// <summary>
@@ -472,7 +472,7 @@ namespace Suitability
             if (emailList.Exists(e => e == regionalEmail))
                 emailList.RemoveAt(emailList.FindIndex(e => e == regionalEmail));
             //call send after converting back to comma separated string
-            message.Send(defaultEMail, gsaPOCEmails, string.Join(",", emailList), "", subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
+            message.Send(defaultEMail, gsaPOCEmails, string.Join(",", emailList), defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
         }
 
         /// <summary>
