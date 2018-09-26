@@ -59,9 +59,9 @@ namespace Suitability
                     SubjectName = record["Subject Name"].ToString(),
                     Position = record["Position"].ToString(),
                     HomeEMail = record["Home E-Mail"].ToString(),
-                    IsCitizen = (bool)record["Is Citizen"],
-                    InvestigationDate = (type.ToUpper() == AdjudicationPersonDetails 
-                        ? (DateTime)record["Investigation Date"] as DateTime?
+                    IsCitizen = record["Is Citizen"].ToString() == "1",
+                    InvestigationDate = (type.ToUpper() == AdjudicationPersonDetails
+                        ? record["Investigation Date"] as DateTime?
                         : null),
                     InvestigatonRequested = record["Investigation Requested"].ToString(),
                     InvestigationType = record["Investigation Type"].ToString(),
@@ -74,7 +74,6 @@ namespace Suitability
             }
             catch (Exception)
             {
-                //log
                 throw;
             }
         }
