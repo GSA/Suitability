@@ -332,6 +332,7 @@ namespace Suitability
                     body = File.ReadAllText(GetFilePath("Tier2RS.html"));
 
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
+                    emailAttachments.Append(GetFilePath(SF_85P, true));
                     emailAttachments.Append(GetFilePath(additionalQuestionsForModerateRiskPositionsForm, true));
                     break;
 
@@ -349,6 +350,7 @@ namespace Suitability
                     body = File.ReadAllText(GetFilePath("Tier4R.html"));
 
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
+                    emailAttachments.Append(GetFilePath(SF_85P, true));
                     break;
 
                 case "tier 1c":
