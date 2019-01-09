@@ -310,27 +310,25 @@ namespace Suitability
                 case "tier 1":
                 case "naci":
                     body = File.ReadAllText(GetFilePath("Tier1.html"));
-
+                    emailAttachments.Append(GetFilePath(appInstructions, true));
                     emailAttachments.Append(GetFilePath(OF_0306, true));
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
                     emailAttachments.Append(GetFilePath(SF_85, true));
-                    emailAttachments.Append(GetFilePath(appInstructions, true));
+                    
                     break;
 
                 case "tier 2s":
                 case "mbi":
                     body = File.ReadAllText(GetFilePath("Tier2S.html"));
-
+                    emailAttachments.Append(GetFilePath(appInstructions, true));
                     emailAttachments.Append(GetFilePath(OF_0306, true));
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
-                    emailAttachments.Append(GetFilePath(SF_85P, true));
-                    emailAttachments.Append(GetFilePath(appInstructions, true));
+                    emailAttachments.Append(GetFilePath(SF_85P, true));                    
                     emailAttachments.Append(GetFilePath(additionalQuestionsForModerateRiskPositionsForm, true));
                     break;
 
                 case "tier 2rs":
                     body = File.ReadAllText(GetFilePath("Tier2RS.html"));
-
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
                     emailAttachments.Append(GetFilePath(SF_85P, true));
                     emailAttachments.Append(GetFilePath(additionalQuestionsForModerateRiskPositionsForm, true));
@@ -339,16 +337,14 @@ namespace Suitability
                 case "tier 4":
                 case "bi":
                     body = File.ReadAllText(GetFilePath("Tier4.html"));
-
+                    emailAttachments.Append(GetFilePath(appInstructions, true));
                     emailAttachments.Append(GetFilePath(OF_0306, true));
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
-                    emailAttachments.Append(GetFilePath(SF_85P, true));
-                    emailAttachments.Append(GetFilePath(appInstructions, true));
+                    emailAttachments.Append(GetFilePath(SF_85P, true));                    
                     break;
 
                 case "tier 4r":
                     body = File.ReadAllText(GetFilePath("Tier4R.html"));
-
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
                     emailAttachments.Append(GetFilePath(SF_85P, true));
                     break;
