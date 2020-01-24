@@ -302,7 +302,7 @@ namespace Suitability
             var SF_85 = "SF85.pdf";
             var SF_85P = "SF85P.pdf";
             var appInstructions = attachments.ApplicaitonInstruction(personInfo.Region, personInfo.InvestigatonRequested);
-            var additionalQuestionsForModerateRiskPositionsForm = "AdditionalQuestionsForModerateRiskPositionsForm.pdf";
+            //var additionalQuestionsForModerateRiskPositionsForm = "AdditionalQuestionsForModerateRiskPositionsForm.pdf";
 
             //Switch on investigation requested to get needed attachments
             switch (personInfo.InvestigatonRequested.ToLower())
@@ -324,14 +324,14 @@ namespace Suitability
                     emailAttachments.Append(GetFilePath(OF_0306, true));
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
                     emailAttachments.Append(GetFilePath(SF_85P, true));                    
-                    emailAttachments.Append(GetFilePath(additionalQuestionsForModerateRiskPositionsForm, true));
+                    //emailAttachments.Append(GetFilePath(additionalQuestionsForModerateRiskPositionsForm, true));
                     break;
 
                 case "tier 2rs":
                     body = File.ReadAllText(GetFilePath("Tier2RS.html"));
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
                     emailAttachments.Append(GetFilePath(SF_85P, true));
-                    emailAttachments.Append(GetFilePath(additionalQuestionsForModerateRiskPositionsForm, true));
+                    //emailAttachments.Append(GetFilePath(additionalQuestionsForModerateRiskPositionsForm, true));
                     break;
 
                 case "tier 4":
