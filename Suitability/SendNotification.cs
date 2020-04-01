@@ -150,7 +150,9 @@ namespace Suitability
                 case "tier 1":
                 case "tier 1c":
                 case "tier 2s":
+                case "tier 2rs":
                 case "tier 4":
+                case "tier 4r":
                     subject = personInfo.SubjectName + " - " + "GSA Contractor Final Fit Determination";
 
                     body = File.ReadAllText(onboardingLocation + @"/GSA Final Fit.html");
@@ -299,7 +301,7 @@ namespace Suitability
             var GSA_3665 = "GSA3665.pdf";
             var SF_85 = "SF85.pdf";
             var SF_85P = "SF85P.pdf";
-            var appInstructions = attachments.ApplicaitonInstruction(personInfo.Region);
+            var appInstructions = attachments.ApplicaitonInstruction(personInfo.Region, personInfo.InvestigatonRequested);
             var additionalQuestionsForModerateRiskPositionsForm = "AdditionalQuestionsForModerateRiskPositionsForm.pdf";
 
             //Switch on investigation requested to get needed attachments
@@ -308,32 +310,43 @@ namespace Suitability
                 case "tier 1":
                 case "naci":
                     body = File.ReadAllText(GetFilePath("Tier1.html"));
-
+                    emailAttachments.Append(GetFilePath(appInstructions, true));
                     emailAttachments.Append(GetFilePath(OF_0306, true));
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
                     emailAttachments.Append(GetFilePath(SF_85, true));
-                    emailAttachments.Append(GetFilePath(appInstructions, true));
+                    
                     break;
 
                 case "tier 2s":
                 case "mbi":
                     body = File.ReadAllText(GetFilePath("Tier2S.html"));
-
+                    emailAttachments.Append(GetFilePath(appInstructions, true));
                     emailAttachments.Append(GetFilePath(OF_0306, true));
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
+                    emailAttachments.Append(GetFilePath(SF_85P, true));                    
+                    emailAttachments.Append(GetFilePath(additionalQuestionsForModerateRiskPositionsForm, true));
+                    break;
+
+                case "tier 2rs":
+                    body = File.ReadAllText(GetFilePath("Tier2RS.html"));
+                    emailAttachments.Append(GetFilePath(GSA_3665, true));
                     emailAttachments.Append(GetFilePath(SF_85P, true));
-                    emailAttachments.Append(GetFilePath(appInstructions, true));
                     emailAttachments.Append(GetFilePath(additionalQuestionsForModerateRiskPositionsForm, true));
                     break;
 
                 case "tier 4":
                 case "bi":
                     body = File.ReadAllText(GetFilePath("Tier4.html"));
-
+                    emailAttachments.Append(GetFilePath(appInstructions, true));
                     emailAttachments.Append(GetFilePath(OF_0306, true));
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
+                    emailAttachments.Append(GetFilePath(SF_85P, true));                    
+                    break;
+
+                case "tier 4r":
+                    body = File.ReadAllText(GetFilePath("Tier4R.html"));
+                    emailAttachments.Append(GetFilePath(GSA_3665, true));
                     emailAttachments.Append(GetFilePath(SF_85P, true));
-                    emailAttachments.Append(GetFilePath(appInstructions, true));
                     break;
 
                 case "tier 1c":
@@ -395,7 +408,7 @@ namespace Suitability
             emails = emails.TrimStart(',').TrimEnd(',');
 
             //If childcare send to default email (hspd12.security@gsa.gov) 
-            //Remove defaultEMail from email BCC
+            //Remove defaultEMail from email BCC - UPDATE 09/20/2018 - Client wants to add HSPD-12 Security to BCC
             //Remove zonal email from sender and recipient
             if (IncludeChildCareEMail(personInfo.InvestigationType.ToLower(), personInfo.InvestigatonRequested.ToLower()))
                 SendT1CSponsorship(personInfo, emails, subject, body, emailAttachments.ToString(), regionalEMail);
@@ -435,7 +448,7 @@ namespace Suitability
             if (emailList.Exists(e => e == regionalEmail))
                 emailList.RemoveAt(emailList.FindIndex(e => e == regionalEmail));
             //call send after converting back to comma separated string
-            message.Send(defaultEMail, personInfo.HomeEMail, string.Join(",", emailList), "", subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
+            message.Send(defaultEMail, personInfo.HomeEMail, string.Join(",", emailList), defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
         }
 
         /// <summary>
@@ -457,7 +470,7 @@ namespace Suitability
             if (emailList.Exists(e => e == regionalEmail))
                 emailList.RemoveAt(emailList.FindIndex(e => e == regionalEmail));
             //call send after converting back to comma separated string
-            message.Send(defaultEMail, gsaPOCEmails, string.Join(",", emailList), "", subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
+            message.Send(defaultEMail, gsaPOCEmails, string.Join(",", emailList), defaultEMail, subject, body, emailAttachments.ToString().TrimEnd(';'), smtpServer, true);
         }
 
         /// <summary>
