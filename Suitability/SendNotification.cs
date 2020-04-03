@@ -207,25 +207,7 @@ namespace Suitability
             body = body.Replace("[CONTRACTNUMBER]", contractInfo.ContractNumber);
 
             //Replace Investigation Type
-            switch (personInfo.InvestigationType.ToLower())
-            {
-                case "tier 1":
-                    investType = "Tier 1 (Previously NACI)";
-                    break;
-                case "tier 2s":
-                    investType = "Tier 2S (Previously MBI)";
-                    break;
-                case "tier 4":
-                    investType = "Tier 4 (Previously BI)";
-                    break;
-                default:
-                    investType = personInfo.InvestigationType;
-                    break;
-            }
-
-            body = body.Replace("[INVESTIGATIONTYPE]", investType);
-
-            //body = body.Replace("[INVESTIGATIONTYPE]", personInfo.InvestigationType);
+            body = body.Replace("[INVESTIGATIONTYPE]", personInfo.InvestigationType);
 
             //Replace Investigation Date
             body = body.Replace("[INVESTIGATIONDATE]", personInfo.InvestigationDate.Value.ToString("MMMM dd, yyyy"));
