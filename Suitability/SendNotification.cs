@@ -149,6 +149,7 @@ namespace Suitability
                 case "ppr":
                 case "tier 1":
                 case "tier 1c":
+                case "tier 2":
                 case "tier 2s":
                 case "tier 2rs":
                 case "tier 4":
