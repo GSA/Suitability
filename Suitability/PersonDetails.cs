@@ -63,7 +63,7 @@ namespace Suitability
                     InvestigationDate = (type.ToUpper() == AdjudicationPersonDetails
                         ? record["Investigation Date"] as DateTime?
                         : null),
-                    InvestigatonRequested = record["Investigation Requested"].ToString(),
+                    InvestigatonRequested = Tier2SToTier2(record["Investigation Requested"].ToString(), type).ToString(),
                     InvestigationType = record["Investigation Type"].ToString(),
                     PortOfEntryDate = record["Port of Entry"].ToString(),
                     Region = record["Region"].ToString(),
@@ -76,6 +76,16 @@ namespace Suitability
             {
                 throw;
             }
+        }
+
+        private static string Tier2SToTier2(string investigation, string type)
+        {
+            if (type.ToLower() == "s" && investigation.ToLower() == "tier 2s")
+            {               
+                return "Tier 2";
+            }
+
+            return investigation;
         }
     }
 }
