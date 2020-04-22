@@ -149,6 +149,7 @@ namespace Suitability
                 case "ppr":
                 case "tier 1":
                 case "tier 1c":
+                case "tier 2":
                 case "tier 2s":
                 case "tier 2rs":
                 case "tier 4":
@@ -207,25 +208,7 @@ namespace Suitability
             body = body.Replace("[CONTRACTNUMBER]", contractInfo.ContractNumber);
 
             //Replace Investigation Type
-            switch (personInfo.InvestigationType.ToLower())
-            {
-                case "tier 1":
-                    investType = "Tier 1 (Previously NACI)";
-                    break;
-                case "tier 2s":
-                    investType = "Tier 2S (Previously MBI)";
-                    break;
-                case "tier 4":
-                    investType = "Tier 4 (Previously BI)";
-                    break;
-                default:
-                    investType = personInfo.InvestigationType;
-                    break;
-            }
-
-            body = body.Replace("[INVESTIGATIONTYPE]", investType);
-
-            //body = body.Replace("[INVESTIGATIONTYPE]", personInfo.InvestigationType);
+            body = body.Replace("[INVESTIGATIONTYPE]", personInfo.InvestigationType);
 
             //Replace Investigation Date
             body = body.Replace("[INVESTIGATIONDATE]", personInfo.InvestigationDate.Value.ToString("MMMM dd, yyyy"));
@@ -319,12 +302,12 @@ namespace Suitability
 
                 case "tier 2s":
                 case "mbi":
-                    body = File.ReadAllText(GetFilePath("Tier2S.html"));
+                case "tier 2":
+                    body = File.ReadAllText(GetFilePath("Tier2.html"));
                     emailAttachments.Append(GetFilePath(appInstructions, true));
                     emailAttachments.Append(GetFilePath(OF_0306, true));
                     emailAttachments.Append(GetFilePath(GSA_3665, true));
                     emailAttachments.Append(GetFilePath(SF_85P, true));                    
-                    emailAttachments.Append(GetFilePath(additionalQuestionsForModerateRiskPositionsForm, true));
                     break;
 
                 case "tier 2rs":

@@ -47,7 +47,8 @@ namespace Suitability
                     return string.Format("T1Zone{0}-ApplicationInstructions.pdf", zone);
                 case "tier 2s":
                 case "mbi":
-                    return string.Format("T2SZone{0}-ApplicationInstructions.pdf", zone);
+                case "tier 2":
+                    return string.Format("T2Zone{0}-ApplicationInstructions.pdf", zone);
                 case "tier 4":
                 case "bi":
                     return string.Format("T4Zone{0}-ApplicationInstructions.pdf", zone);
