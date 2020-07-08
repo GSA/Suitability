@@ -77,8 +77,9 @@ namespace Suitability
 
         /// <summary>
         /// Sends adjudication e-mails
+        /// Original method: Process data here.
         /// </summary>
-        public void SendAdjudicationNotification()
+        public void SendAdjudicationNotificationV1()
         {
             //Declare function variables
             //string emails = string.Empty;
@@ -245,8 +246,9 @@ namespace Suitability
 
         /// <summary>
         /// Send sponsorship emails
+        /// /// Original method: Process data here.
         /// </summary>
-        public void SendSponsorshipNotification()
+        public void SendSponsorshipNotificationV1()
         {
             //Declare string builder to build email attachments list
             StringBuilder emailAttachments = new StringBuilder();
@@ -478,5 +480,87 @@ namespace Suitability
             //old sac email
             body = File.ReadAllText(onboardingLocation + @"\SAC.html");
         }
+
+        public void SendSponsorshipNotification()
+        {
+            HSPD12Email("SPSH");
+        }
+
+
+        public void SendAdjudicationNotification()
+        {
+            HSPD12Email("ADJC");
+
+            /*
+            string body = string.Empty;
+            string subject = string.Empty;
+            string emails = string.Empty;
+            string gsaPOCEMails = string.Empty;
+            string vendorPOCEmails = string.Empty;
+            string regionalEMails = string.Empty;
+            string fasEMail = string.Empty;
+            string childcareEMail = string.Empty;
+            string gsaPOCNames = string.Empty;
+
+            string investType = string.Empty;
+            string phoneNumber = string.Empty;
+
+            string lEmailBody = string.Empty;
+            string lToEmail = string.Empty;
+            string lCCEmail = string.Empty;
+            string lBCCEmail = string.Empty;
+            
+            //Set up db connection
+            //conn = new MySqlConnection();
+            //conn.ConnectionString = connectionString;
+            EmailDetails emailData = new EmailDetails();
+            emailData = emailData.GetEmailDetails("ADJC", personID, conn);
+            lEmailBody = emailData.EmailBody;
+            lToEmail = emailData.ToEmail;
+            lCCEmail = emailData.CCEmail;
+            lBCCEmail = emailData.BCCEmail;
+
+            //if (appEnv == "DEV")
+            {
+                lToEmail = defaultEMail;
+                lCCEmail = defaultEMail;
+                lBCCEmail = defaultEMail;
+            }
+
+            message.Send(emailData.RegionalEMail, lToEmail, lCCEmail, lBCCEmail, emailData.Subject, lEmailBody, emailData.AttachFile, smtpServer, true);
+            */
+        }
+
+
+        private void HSPD12Email(string AppCode)
+        {
+            //Declare function variables
+/*
+            string emails = string.Empty;
+            string regionalEMail = string.Empty;
+            string investType = string.Empty;
+            string phoneNumber = string.Empty;
+            string lEmailBody = string.Empty;
+            string lToEmail = string.Empty;
+            string lCCEmail = string.Empty;
+            string lBCCEmail = string.Empty;
+*/
+            //Set up db connection
+            //conn = new MySqlConnection();
+            //conn.ConnectionString = connectionString;
+            EmailDetails emailData = new EmailDetails();
+            emailData = emailData.GetEmailDetails(AppCode, personID, conn);
+            /*
+            lEmailBody = emailData.EmailBody;
+            lToEmail = emailData.ToEmail;
+            lCCEmail = string.Join(",", emailData.SponsorshipEmails, emailData.CCEmail);
+            lBCCEmail = emailData.BCCEmail;
+*/
+
+            //message.Send(emailData.RegionalEMail, lToEmail, lCCEmail, lBCCEmail, emailData.Subject, lEmailBody, emailData.AttachFile, smtpServer, true);
+            message.Send(emailData.EmailFromAdd, emailData.EmailToAdd, emailData.EmailCCAdd, emailData.EmailBCCAdd, emailData.EmailSubject, emailData.EmailBody, emailData.EmailAttachment, smtpServer, true);
+
+        }
+
     }
 }

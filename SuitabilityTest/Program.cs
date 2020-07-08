@@ -26,8 +26,12 @@ namespace SuitabilityTest
 
             SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboardidng);
 
-            //sendNotification.SendAdjudicationNotification();
-            sendNotification.SendSponsorshipNotification();
+            //Calling original Suitability methods
+            //sendNotification.SendAdjudicationNotificationV1();
+            //sendNotification.SendSponsorshipNotificationV1();            
+            // Calling new Suitability methods
+            sendNotification.SendAdjudicationNotification();
+            //sendNotification.SendSponsorshipNotification();
         }
     }
 }
