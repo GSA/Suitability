@@ -73,13 +73,13 @@ namespace Suitability
                     PhoneNumber = record["zone_phone"].ToString()
                      */
 
-                    EmailBody = record["EmailBody"].ToString(),
+                    EmailBody = record["eMailBody"].ToString(),
                     EmailSubject = record["eMailSubject"].ToString(),
-                    EmailFromAdd = record["From_Email"].ToString(),
-                    EmailToAdd = record["toEmail"].ToString(),
-                    EmailCCAdd = record["ccemail"].ToString(),
-                    EmailBCCAdd = record["bccemail"].ToString(),
-                    EmailAttachment = record["AttachmentFilePathName"].ToString()
+                    EmailFromAdd = record["eMailFromAdd"].ToString(),
+                    EmailToAdd = record["eMailToAdd"].ToString(),
+                    EmailCCAdd = record["eMailCCAdd"].ToString(),
+                    EmailBCCAdd = record["eMailBCCAdd"].ToString(),
+                    EmailAttachment = record["eMailAttachment"].ToString()
 
                 };
                 return emailData;

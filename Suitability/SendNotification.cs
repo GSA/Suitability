@@ -535,19 +535,6 @@ namespace Suitability
         private void HSPD12Email(string AppCode)
         {
             //Declare function variables
-/*
-            string emails = string.Empty;
-            string regionalEMail = string.Empty;
-            string investType = string.Empty;
-            string phoneNumber = string.Empty;
-            string lEmailBody = string.Empty;
-            string lToEmail = string.Empty;
-            string lCCEmail = string.Empty;
-            string lBCCEmail = string.Empty;
-*/
-            //Set up db connection
-            //conn = new MySqlConnection();
-            //conn.ConnectionString = connectionString;
             EmailDetails emailData = new EmailDetails();
             emailData = emailData.GetEmailDetails(AppCode, personID, conn);
             /*
