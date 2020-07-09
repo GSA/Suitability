@@ -481,12 +481,22 @@ namespace Suitability
             body = File.ReadAllText(onboardingLocation + @"\SAC.html");
         }
 
+
+
+        /// <summary>
+        /// New SendSponsorshipNotification method developed as part of email consolidation.
+        /// All the business logic to process the person information is moved to DB.
+        /// <summary>
         public void SendSponsorshipNotification()
         {
             HSPD12Email("SPSH");
         }
 
 
+        /// <summary>
+        /// New SendAdjudicationNotification method developed s part of email consolidation.
+        /// All the business logic to process the person information is moved to DB.
+        /// <summary>
         public void SendAdjudicationNotification()
         {
             HSPD12Email("ADJC");
@@ -532,6 +542,11 @@ namespace Suitability
         }
 
 
+        /// <summary>
+        /// New method that access the DB and gets the email details.
+        /// Developed as part of email consolidation.   
+        /// <summary>
+        /// <param name="AppCode"></param>
         private void HSPD12Email(string AppCode)
         {
             //Declare function variables
