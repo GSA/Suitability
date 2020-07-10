@@ -28,10 +28,10 @@ namespace SuitabilityTest
 
             //Calling original Suitability methods
             //sendNotification.SendAdjudicationNotificationV1();
-            sendNotification.SendSponsorshipNotificationV1();            
+            //sendNotification.SendSponsorshipNotificationV1();            
             // Calling new Suitability methods
             //sendNotification.SendAdjudicationNotification();
-            //sendNotification.SendSponsorshipNotification();
+            sendNotification.SendSponsorshipNotification();
         }
     }
 }
