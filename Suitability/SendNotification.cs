@@ -482,17 +482,6 @@ namespace Suitability
         }
 
 
-
-        /// <summary>
-        /// New SendSponsorshipNotification method developed as part of email consolidation.
-        /// All the business logic to process the person information is moved to DB.
-        /// <summary>
-        public void SendSponsorshipNotification()
-        {
-            HSPD12Email("SPSH");
-        }
-
-
         /// <summary>
         /// New SendAdjudicationNotification method developed s part of email consolidation.
         /// All the business logic to process the person information is moved to DB.
@@ -502,6 +491,14 @@ namespace Suitability
             HSPD12Email("ADJC");
         }
 
+        /// <summary>
+        /// New SendSponsorshipNotification method developed as part of email consolidation.
+        /// All the business logic to process the person information is moved to DB.
+        /// <summary>
+        public void SendSponsorshipNotification()
+        {
+            HSPD12Email("SPSH");
+        }
 
         /// <summary>
         /// New method that access the DB and gets the email details.
