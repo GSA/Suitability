@@ -22,7 +22,7 @@ namespace SuitabilityTest
         {
             int persId = 3244;
             persId = 30782;
-            persId = 392252;
+            //persId = 392252;
 
             SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboardidng);
 

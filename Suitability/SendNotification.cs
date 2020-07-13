@@ -510,8 +510,27 @@ namespace Suitability
             //Declare function variables
             EmailDetails emailData = new EmailDetails();
             emailData = emailData.GetEmailDetails(AppCode, personID, conn);
-            message.Send(emailData.EmailFromAdd, emailData.EmailToAdd, emailData.EmailCCAdd, emailData.EmailBCCAdd, emailData.EmailSubject, emailData.EmailBody, emailData.EmailAttachment, smtpServer, true);
+            string strEmailAttachment = onboardingLocation + emailData.EmailAttachment.Replace(";", string.Concat(";",onboardingLocation));
+            message.Send(emailData.EmailFromAdd, emailData.EmailToAdd, emailData.EmailCCAdd, emailData.EmailBCCAdd, emailData.EmailSubject, emailData.EmailBody, strEmailAttachment, smtpServer, true);
+        }
 
+        private string ProcessAttachmentLocation(string strAttachmentList)
+        {
+            string _strEmailAttachment = string.Empty;
+
+            if (strAttachmentList.IndexOf(";")>0)
+            {
+                Array a = strAttachmentList.Split(';');
+                for(int i =0; i<a.Length;i++)
+                {
+                    _strEmailAttachment += string.Concat(onboardingLocation, a.GetValue(i).ToString(),';');
+                }
+            }
+            else if (strAttachmentList.Length > 0)
+            {
+                _strEmailAttachment = string.Concat(onboardingLocation, strAttachmentList,';');
+            }
+            return  _strEmailAttachment.TrimEnd(';');
         }
 
     }
