@@ -514,6 +514,7 @@ namespace Suitability
             message.Send(emailData.EmailFromAdd, emailData.EmailToAdd, emailData.EmailCCAdd, emailData.EmailBCCAdd, emailData.EmailSubject, emailData.EmailBody, strEmailAttachment, smtpServer, true);
         }
 
+        /*
         private string ProcessAttachmentLocation(string strAttachmentList)
         {
             string _strEmailAttachment = string.Empty;
@@ -532,6 +533,6 @@ namespace Suitability
             }
             return  _strEmailAttachment.TrimEnd(';');
         }
-
+        */
     }
 }
