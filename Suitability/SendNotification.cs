@@ -500,6 +500,11 @@ namespace Suitability
             HSPD12Email("SPSH");
         }
 
+        public void SendSRSNotification()
+        {
+            HSPD12Email("SRS");
+        }
+
         /// <summary>
         /// New method that access the DB and gets the email details.
         /// Developed as part of email consolidation.   
@@ -510,7 +515,10 @@ namespace Suitability
             //Declare function variables
             EmailDetails emailData = new EmailDetails();
             emailData = emailData.GetEmailDetails(AppCode, personID, conn);
-            string strEmailAttachment = onboardingLocation + emailData.EmailAttachment.Replace(";", string.Concat(";",onboardingLocation));
+            string strEmailAttachment = string.Empty;
+            if (emailData.EmailAttachment.IndexOf(";") > 0) {
+                strEmailAttachment = onboardingLocation + emailData.EmailAttachment.Replace(";", string.Concat(";", onboardingLocation));
+            }
             message.Send(emailData.EmailFromAdd, emailData.EmailToAdd, emailData.EmailCCAdd, emailData.EmailBCCAdd, emailData.EmailSubject, emailData.EmailBody, strEmailAttachment, smtpServer, true);
         }
 
