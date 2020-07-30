@@ -20,9 +20,9 @@ namespace SuitabilityTest
 
         static void Main(string[] args)
         {
-            int persId = 3244;
-            persId = 396684;
-            persId = 396686;
+            //int persId = 3244;
+            //persId = 396684;
+            //persId = 396686;
             SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboardidng);
 
             //Calling original Suitability methods
