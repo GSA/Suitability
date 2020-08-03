@@ -483,7 +483,7 @@ namespace Suitability
 
 
         /// <summary>
-        /// New SendAdjudicationNotification method developed s part of email consolidation.
+        /// New SendAdjudicationNotification method developed ss part of email consolidation.
         /// All the business logic to process the person information is moved to DB.
         /// <summary>
         public void SendAdjudicationNotification()
@@ -500,6 +500,11 @@ namespace Suitability
             HSPD12Email("SPSH");
         }
 
+
+        /// <summary>
+        /// New SendSRSNotification method developed ss part of email consolidation.
+        /// All the business logic to process the person information is moved to DB.
+        /// <summary>
         public void SendSRSNotification()
         {
             HSPD12Email("SRS");
@@ -522,25 +527,26 @@ namespace Suitability
             message.Send(emailData.EmailFromAdd, emailData.EmailToAdd, emailData.EmailCCAdd, emailData.EmailBCCAdd, emailData.EmailSubject, emailData.EmailBody, strEmailAttachment, smtpServer, true);
         }
 
-        /*
-        private string ProcessAttachmentLocation(string strAttachmentList)
+        
+        /// <summary>
+        /// The following are 3 overloaded methods for SendAdjudicationNotification, SendSponsorshipNotification and SendSRSNotification developed as part of email consolidation.
+        /// This overloaded method is to handle new types of unique requests that may come in the future.
+        /// <summary>
+        /// <param name="AppCode"></param>
+        public void SendAdjudicationNotification(string sAppCode)
         {
-            string _strEmailAttachment = string.Empty;
-
-            if (strAttachmentList.IndexOf(";")>0)
-            {
-                Array a = strAttachmentList.Split(';');
-                for(int i =0; i<a.Length;i++)
-                {
-                    _strEmailAttachment += string.Concat(onboardingLocation, a.GetValue(i).ToString(),';');
-                }
-            }
-            else if (strAttachmentList.Length > 0)
-            {
-                _strEmailAttachment = string.Concat(onboardingLocation, strAttachmentList,';');
-            }
-            return  _strEmailAttachment.TrimEnd(';');
+            HSPD12Email(sAppCode);
         }
-        */
+
+        public void SendSponsorshipNotification(string sAppCode)
+        {
+            HSPD12Email(sAppCode);
+        }
+        public void SendSRSNotification(string sAppCode)
+        {
+            HSPD12Email(sAppCode);
+        }
+
+
     }
 }
