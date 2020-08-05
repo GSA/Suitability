@@ -20,6 +20,7 @@ namespace Suitability
         //Declare class variables and default values
         private string defaultEMail = "hspd12.security@gsa.gov";
         private int personID = 0;
+        private int ContractNumber = 0;
         private string connectionString = string.Empty;
         private string smtpServer = "192.168.1.1";
         //private string emailTemplatesLocation = string.Empty;
@@ -34,10 +35,11 @@ namespace Suitability
         /// <param name="connectionString"></param>
         /// <param name="smtpServer"></param>
         /// <param name="emailTemplatesLocation"></param>
-        public SendNotification(string defaultEMail, int personID, string connectionString, string smtpServer, string onboardingLocation)
+        public SendNotification(string defaultEMail, int personID, string connectionString, string smtpServer, string onboardingLocation, int ContractNumber = 0)
         {
             this.defaultEMail = defaultEMail;
             this.personID = personID;
+            this.ContractNumber = ContractNumber;
             this.connectionString = connectionString;
             this.smtpServer = smtpServer;
             //this.emailTemplatesLocation = emailTemplatesLocation;
@@ -510,6 +512,17 @@ namespace Suitability
             HSPD12Email("SRS");
         }
 
+
+        /// <summary>
+        /// New SendExpiringContractReminder method developed ss part of email consolidation. For CORS.
+        /// All the business logic to process the person information is moved to DB.
+        /// <summary>
+        public void SendExpiringContractReminder()
+        {
+            HSPD12Email("CORS");
+        }
+
+
         /// <summary>
         /// New method that access the DB and gets the email details.
         /// Developed as part of email consolidation.   
@@ -543,6 +556,10 @@ namespace Suitability
             HSPD12Email(sAppCode);
         }
         public void SendSRSNotification(string sAppCode)
+        {
+            HSPD12Email(sAppCode);
+        }
+        public void SendExpiringContractReminder(string sAppCode)
         {
             HSPD12Email(sAppCode);
         }

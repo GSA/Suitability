@@ -16,14 +16,14 @@ namespace SuitabilityTest
         private static string connectionString = ConfigurationManager.AppSettings["CONNECTIONSTRING"];
         private static string smtpServer = ConfigurationManager.AppSettings["SMTPSERVER"];
         private static string defaultEMail = ConfigurationManager.AppSettings["DEFAULTEMAIL"];
-        private static string onboardidng = ConfigurationManager.AppSettings["ONBOARDING"];
+        private static string onboarding = ConfigurationManager.AppSettings["ONBOARDING"];
 
         static void Main(string[] args)
         {
             int persId = 3244;
             //persId = 396684;
             //persId = 396686;
-            SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboardidng);
+            SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboarding);
 
             //Calling original Suitability methods
             //sendNotification.SendAdjudicationNotificationV1();
