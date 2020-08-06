@@ -532,7 +532,7 @@ namespace Suitability
         {
             //Declare function variables
             EmailDetails emailData = new EmailDetails();
-            emailData = emailData.GetEmailDetails(AppCode, personID, conn);
+            emailData = emailData.GetEmailDetails(AppCode, personID, conn, ContractNumber.ToString());
             string strEmailAttachment = string.Empty;
             if (emailData.EmailAttachment.IndexOf(";") > 0) {
                 strEmailAttachment = onboardingLocation + emailData.EmailAttachment.Replace(";", string.Concat(";", onboardingLocation));

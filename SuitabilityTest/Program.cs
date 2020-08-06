@@ -32,7 +32,8 @@ namespace SuitabilityTest
             // Calling new Suitability methods
             sendNotification.SendAdjudicationNotification();
             sendNotification.SendSponsorshipNotification();
-            sendNotification.SendSRSNotification();
+            //sendNotification.SendSRSNotification();
+            //sendNotification.SendExpiringContractReminder();
         }
     }
 }
