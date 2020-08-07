@@ -21,19 +21,21 @@ namespace SuitabilityTest
         static void Main(string[] args)
         {
             int persId = 3244;
+            int ContractId = 34332;
+            persId = 0;
             //persId = 396684;
             //persId = 396686;
-            SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboarding);
-
+            //SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboarding);
+            SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboarding, ContractId);
             //Calling original Suitability methods
             //sendNotification.SendAdjudicationNotificationV1();
             //sendNotification.SendSponsorshipNotificationV1(); 
 
             // Calling new Suitability methods
-            sendNotification.SendAdjudicationNotification();
-            sendNotification.SendSponsorshipNotification();
+            //sendNotification.SendAdjudicationNotification();
+            //sendNotification.SendSponsorshipNotification();
             //sendNotification.SendSRSNotification();
-            //sendNotification.SendExpiringContractReminder();
+            sendNotification.SendExpiringContractReminder();
         }
     }
 }
