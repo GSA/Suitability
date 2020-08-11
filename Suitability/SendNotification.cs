@@ -490,7 +490,7 @@ namespace Suitability
         /// <summary>
         public void SendAdjudicationNotification()
         {
-            HSPD12Email("ADJC");
+            HSPD12Email("ADJC", string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
         }
 
         /// <summary>
@@ -499,7 +499,7 @@ namespace Suitability
         /// <summary>
         public void SendSponsorshipNotification()
         {
-            HSPD12Email("SPSH");
+            HSPD12Email("SPSH", string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
         }
 
 
@@ -509,7 +509,7 @@ namespace Suitability
         /// <summary>
         public void SendSRSNotification()
         {
-            HSPD12Email("SRS");
+            HSPD12Email("SRS", string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
         }
 
 
@@ -517,9 +517,9 @@ namespace Suitability
         /// New SendExpiringContractReminder method developed ss part of email consolidation. For CORS.
         /// All the business logic to process the person information is moved to DB.
         /// <summary>
-        public void SendExpiringContractReminder()
+        public void SendExpiringContractReminder(string sContractNumber, string sContractName, string sContractEndDate, string sDaysUntilExpired, string sToEmails, string sCCEmails)
         {
-            HSPD12Email("CORS");
+            HSPD12Email("CORS", sContractNumber,  sContractName,  sContractEndDate,  sDaysUntilExpired,  sToEmails, sCCEmails);
         }
 
 
@@ -528,11 +528,11 @@ namespace Suitability
         /// Developed as part of email consolidation.   
         /// <summary>
         /// <param name="AppCode"></param>
-        private void HSPD12Email(string AppCode)
+        private void HSPD12Email(string AppCode, string ContractNumber, string ContractName, string ContractEndDate, string DaysUntilExpired, string ToEmails, string CCEmails)
         {
             //Declare function variables
             EmailDetails emailData = new EmailDetails();
-            emailData = emailData.GetEmailDetails(AppCode, personID, conn, ContractNumber.ToString());
+            emailData = emailData.GetEmailDetails(AppCode, personID, conn, ContractNumber, ContractName, ContractEndDate, DaysUntilExpired, ToEmails, CCEmails);
             string strEmailAttachment = string.Empty;
             if (emailData.EmailAttachment.IndexOf(";") > 0) {
                 strEmailAttachment = onboardingLocation + emailData.EmailAttachment.Replace(";", string.Concat(";", onboardingLocation));
@@ -540,28 +540,30 @@ namespace Suitability
             message.Send(emailData.EmailFromAdd, emailData.EmailToAdd, emailData.EmailCCAdd, emailData.EmailBCCAdd, emailData.EmailSubject, emailData.EmailBody, strEmailAttachment, smtpServer, true);
         }
 
-        
+
+
         /// <summary>
-        /// The following are 3 overloaded methods for SendAdjudicationNotification, SendSponsorshipNotification and SendSRSNotification developed as part of email consolidation.
+        /// The following are the overloaded methods for SendAdjudicationNotification, SendSponsorshipNotification, SendSRSNotification and SendExpiringContractReminder
+        /// developed as part of email consolidation.
         /// This overloaded method is to handle new types of unique requests that may come in the future.
         /// <summary>
         /// <param name="AppCode"></param>
         public void SendAdjudicationNotification(string sAppCode)
         {
-            HSPD12Email(sAppCode);
+            HSPD12Email(sAppCode, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
         }
 
         public void SendSponsorshipNotification(string sAppCode)
         {
-            HSPD12Email(sAppCode);
+            HSPD12Email(sAppCode, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
         }
         public void SendSRSNotification(string sAppCode)
         {
-            HSPD12Email(sAppCode);
+            HSPD12Email(sAppCode, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
         }
-        public void SendExpiringContractReminder(string sAppCode)
+        public void SendExpiringContractReminder(string sAppCode, string sContractNumber, string sContractName, string sContractEndDate, string sDaysUntilExpired, string sToEmails, string sCCEmails)
         {
-            HSPD12Email(sAppCode);
+            HSPD12Email(sAppCode, sContractNumber, sContractName, sContractEndDate, sDaysUntilExpired, sToEmails, sCCEmails);
         }
 
 

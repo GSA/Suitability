@@ -94,7 +94,7 @@ namespace Suitability
         }
 
 
-        public EmailDetails GetEmailDetails(string AppCode, int PersID, MySqlConnection conn, string ContractNumber=null)
+        public EmailDetails GetEmailDetails(string AppCode, int PersID, MySqlConnection conn, string ContractNumber, string ContractName, string ContractEndDate, string DaysUntilExpired, string ToEmails, string CCEmails)
         {
             try
             {
@@ -113,6 +113,11 @@ namespace Suitability
                         cmd.Parameters.AddWithValue("AppCode", AppCode);
                         cmd.Parameters.AddWithValue("PersonID", PersID);
                         cmd.Parameters.AddWithValue("ContractNumber", ContractNumber);
+                        cmd.Parameters.AddWithValue("ContractName", ContractName);
+                        cmd.Parameters.AddWithValue("ContractEndDate", ContractEndDate);
+                        cmd.Parameters.AddWithValue("DaysUntilExpired", DaysUntilExpired);
+                        cmd.Parameters.AddWithValue("ToEmails", ToEmails);
+                        cmd.Parameters.AddWithValue("CCEmails", CCEmails);
 
                         cmd.CommandText = "HSPD12Email_Main";
                         cmd.CommandType = CommandType.StoredProcedure;
