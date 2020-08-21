@@ -56,6 +56,7 @@
     <Compile Include="ContractDetails.cs" />
     <Compile Include="Contracts.cs" />
     <Compile Include="EMail.cs" />
+    <Compile Include="EmailDetails.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="PersonDetails.cs" />
