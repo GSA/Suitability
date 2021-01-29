@@ -36,7 +36,7 @@ namespace SuitabilityTest
             sendNotification.SendAdjudicationNotification();
             //sendNotification.SendSponsorshipNotification();
             sendNotification.SendSRSNotification();
-            sendNotification.SendExpiringContractReminder("47PF0018D0039", "Testing from Dev", "2020-06-06", "0", "rajagopalan.ramachandran+CORSSUITDEV@gsa.gov, yun.zheng+CORSSUITDEV@gsa.gov", "david.lenz+zonec@gsa.gov");
+            //sendNotification.SendExpiringContractReminder("47PF0018D0039", "Testing from Dev", "2020-06-06", "0", "rajagopalan.ramachandran+CORSSUITDEV@gsa.gov, yun.zheng+CORSSUITDEV@gsa.gov", "david.lenz+zonec@gsa.gov");
 
         }
     }
