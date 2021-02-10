@@ -27,7 +27,7 @@ namespace SuitabilityTest
             //persId = 396684;
             //persId = 396686;
             persId = 195705;
-            persId = 143232;
+            //persId = 143232;
             //SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboarding);
             SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboarding, ContractId);
             //Calling original Suitability methods
