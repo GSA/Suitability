@@ -523,6 +523,16 @@ namespace Suitability
         }
 
 
+
+        ///<summary>
+        ///New SendInactiveReminder method developed for GCIMS when contractors are made inactive to remind for PIV card collection
+        ///All the business logic to determin the PIV card eligibility is in DB
+        /// </summary>
+        public void SendInactiveReminder()
+        {
+            HSPD12Email("INAM", string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+        }
+
         /// <summary>
         /// New method that access the DB and gets the email details.
         /// Developed as part of email consolidation.   
@@ -537,7 +547,11 @@ namespace Suitability
             if (emailData.EmailAttachment.IndexOf(";") > 0) {
                 strEmailAttachment = onboardingLocation + emailData.EmailAttachment.Replace(";", string.Concat(";", onboardingLocation));
             }
-            message.Send(emailData.EmailFromAdd, emailData.EmailToAdd, emailData.EmailCCAdd, emailData.EmailBCCAdd, emailData.EmailSubject, emailData.EmailBody, strEmailAttachment, smtpServer, true);
+
+            if (emailData.EmailFromAdd.Contains("@"))
+            {
+                message.Send(emailData.EmailFromAdd, emailData.EmailToAdd, emailData.EmailCCAdd, emailData.EmailBCCAdd, emailData.EmailSubject, emailData.EmailBody, strEmailAttachment, smtpServer, true);
+            }
         }
 
 
