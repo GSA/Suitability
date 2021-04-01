@@ -543,14 +543,18 @@ namespace Suitability
             //Declare function variables
             EmailDetails emailData = new EmailDetails();
             emailData = emailData.GetEmailDetails(AppCode, personID, conn, ContractNumber, ContractName, ContractEndDate, DaysUntilExpired, ToEmails, CCEmails);
-            string strEmailAttachment = string.Empty;
-            if (emailData.EmailAttachment.IndexOf(";") > 0) {
-                strEmailAttachment = onboardingLocation + emailData.EmailAttachment.Replace(";", string.Concat(";", onboardingLocation));
-            }
-
-            if (emailData.EmailFromAdd.Contains("@"))
+            if (emailData != null)
             {
-                message.Send(emailData.EmailFromAdd, emailData.EmailToAdd, emailData.EmailCCAdd, emailData.EmailBCCAdd, emailData.EmailSubject, emailData.EmailBody, strEmailAttachment, smtpServer, true);
+                string strEmailAttachment = string.Empty;
+                if (emailData.EmailAttachment.IndexOf(";") > 0)
+                {
+                    strEmailAttachment = onboardingLocation + emailData.EmailAttachment.Replace(";", string.Concat(";", onboardingLocation));
+                }
+
+                if (emailData.EmailFromAdd.Contains("@"))
+                {
+                    message.Send(emailData.EmailFromAdd, emailData.EmailToAdd, emailData.EmailCCAdd, emailData.EmailBCCAdd, emailData.EmailSubject, emailData.EmailBody, strEmailAttachment, smtpServer, true);
+                }
             }
         }
 

@@ -26,7 +26,7 @@ namespace SuitabilityTest
             ContractId = 0;
             //persId = 396684;
             //persId = 396686;
-            persId = 195705;
+            persId = 15256;
             //persId = 143232;
             //SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboarding);
             SendNotification sendNotification = new Suitability.SendNotification(defaultEMail, persId, connectionString, smtpServer, onboarding, ContractId);
@@ -40,7 +40,7 @@ namespace SuitabilityTest
             //sendNotification.SendSRSNotification();
             //sendNotification.SendExpiringContractReminder("47PF0018D0039", "Testing from Dev", "2020-06-06", "0", "rajagopalan.ramachandran+CORSSUITDEV@gsa.gov, yun.zheng+CORSSUITDEV@gsa.gov", "david.lenz+zonec@gsa.gov");
             
-            sendNotification.SendInactiveReminder();
+            //sendNotification.SendInactiveReminder();
 
         }
     }
